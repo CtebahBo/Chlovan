@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f4ee">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="CHLOVAN">
+<link rel="manifest" href="manifest.json">
+<title>CHLOVAN</title>
+<style>
+:root{--bg:#f7f4ee;--card:#fff;--text:#24231f;--muted:#7a776f;--line:#e7e1d8;--accent:#2f5d50;--accent2:#e9f0ed;--danger:#a24747;--shadow:0 8px 24px rgba(40,35,28,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:88px}
+header{padding:22px 18px 10px;position:sticky;top:0;background:rgba(247,244,238,.94);backdrop-filter:blur(12px);z-index:5}
+.brand{font-size:12px;letter-spacing:.16em;font-weight:800;color:var(--accent)}h1{font-size:28px;margin:4px 0 0}
+.weekbar{display:flex;gap:8px;overflow:auto;padding:12px 18px 8px}.weekbtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;white-space:nowrap}.weekbtn.active{background:var(--accent);color:white;border-color:var(--accent)}
+main{padding:8px 14px}.screen{display:none}.screen.active{display:block}
+.day{background:var(--card);border:1px solid var(--line);border-radius:18px;margin:10px 0;box-shadow:var(--shadow);overflow:hidden}.dayhead{padding:13px 15px 7px;font-weight:800;font-size:14px}.slot{border-top:1px solid var(--line);padding:12px 15px;display:flex;align-items:center;gap:12px}.slotlabel{width:50px;color:var(--muted);font-size:11px;font-weight:800;text-transform:uppercase}.meal{flex:1;min-width:0}.meal-lines{display:flex;flex-direction:column;gap:8px}.meal-line{display:flex;align-items:center;gap:8px}.meal-line .mealname{flex:1;min-width:0}.meal-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}.add-meal{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:20px;line-height:1;color:var(--accent);padding:0}.meal-line .edit{padding:8px 10px}.mealname{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meal-link{border:0;background:transparent;padding:0;text-align:left;width:100%;cursor:pointer;color:inherit}.meal-link:hover{text-decoration:underline}.empty{color:#aaa;font-weight:500}.edit{border:0;background:var(--accent2);color:var(--accent);border-radius:10px;padding:8px 10px;font-size:12px;font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;margin:10px 0;padding:15px;box-shadow:var(--shadow)}.card h2{font-size:17px;margin:0 0 12px}
+.section-title{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:20px 3px 8px}
+.course-cat{margin:12px 0}.course-cat h3{font-size:15px;margin:0 0 7px}.course-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}.course-row input{width:19px;height:19px;margin-top:1px}.course-main{flex:1}.qty{font-weight:800}.source{font-size:11px;color:var(--muted);margin-top:2px}.checked{text-decoration:line-through;opacity:.45}
+.search{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff;outline:none}.meal-list{display:grid;gap:8px;margin-top:10px}.meal-option{padding:13px;border:1px solid var(--line);border-radius:12px;background:#fff;text-align:left}.meal-option:hover{border-color:var(--accent)}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.94);backdrop-filter:blur(15px);border-top:1px solid var(--line);display:flex;justify-content:center;z-index:10}.nav{width:min(760px,100%);display:flex}.nav button{flex:1;border:0;background:transparent;padding:12px 5px 10px;color:var(--muted);font-size:11px;font-weight:700}.nav button.active{color:var(--accent)}.icon{display:flex;width:34px;height:30px;align-items:center;justify-content:center;margin:0 auto 3px;border-radius:9px;font-size:20px}.nav button.active .icon{background:var(--accent);color:#fff}.recipe-add{display:flex;justify-content:space-between;align-items:center}.recipe-add button{font-size:22px;width:40px;height:40px;border-radius:12px}.ingredient-edit{display:grid;grid-template-columns:1.6fr .7fr .7fr 1fr auto;gap:7px;align-items:center;margin-bottom:8px}.ingredient-edit input,.ingredient-edit select{min-width:0;padding:9px;border:1px solid var(--line);border-radius:10px;background:#fff}.ingredient-edit button{border:0;background:#f2f2f2;border-radius:9px;width:34px;height:34px}.recipe-list-note{margin-bottom:10px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:flex-end;z-index:20}.modal.show{display:flex}.sheet{background:var(--bg);width:100%;max-width:760px;margin:auto;border-radius:22px 22px 0 0;max-height:86vh;overflow:auto;padding:16px}.sheettop{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#fff;border-radius:10px;padding:8px 11px}.muted{color:var(--muted);font-size:12px}
+.actions{display:flex;gap:8px}.secondary{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 12px}.primary{border:0;background:var(--accent);color:#fff;border-radius:10px;padding:9px 12px;font-weight:700}
+.toast{position:fixed;left:50%;bottom:82px;transform:translateX(-50%);background:#222;color:white;padding:9px 13px;border-radius:999px;font-size:12px;display:none;z-index:30}.toast.show{display:block}
+.empty-state{text-align:center;padding:30px 15px;color:var(--muted)}.archive-item{display:flex;justify-content:space-between;align-items:center;gap:10px}.archive-item b{font-size:14px}.archive-item button{flex-shrink:0}
+@media(min-width:700px){main{padding:8px 18px}.bottom{position:fixed}}
+
+@media (max-width: 600px){
+  :root{--shadow:0 4px 16px rgba(40,35,28,.06)}
+  body{font-size:16px;-webkit-text-size-adjust:100%;overflow-x:hidden}
+  .app{width:100%;max-width:none;padding-bottom:86px}
+  header{padding:14px 14px 6px}
+  .brand{font-size:10px}
+  h1{font-size:24px;margin-top:2px}
+  .weekbar{padding:9px 12px 7px;gap:7px}
+  .weekbtn{padding:10px 13px;font-size:14px;min-height:42px}
+  main{padding:5px 10px}
+  .day{margin:8px 0;border-radius:15px}
+  .dayhead{padding:12px 13px 7px;font-size:13px}
+  .slot{padding:11px 10px;gap:8px;align-items:flex-start}
+  .slotlabel{width:48px;padding-top:7px;font-size:10px}
+  .meal{padding-top:2px}
+  .meal-lines{gap:6px}
+  .meal-line{gap:6px;align-items:center}
+  .mealname{font-size:15px;line-height:1.25}
+  .meal-actions{gap:5px}
+  .edit,.add-meal{min-width:38px;min-height:38px}
+  .edit{padding:7px 9px;font-size:12px}
+  .add-meal{width:38px;height:38px;font-size:21px}
+  .card{border-radius:15px;padding:13px}
+  .course-row{padding:11px 4px}
+  .recipe-add{position:sticky;top:0;z-index:2;background:var(--bg);padding:4px 0 10px}
+  .recipe-add button{width:42px;height:42px}
+  .search{min-height:44px;font-size:16px}
+  .meal-option{min-height:46px;padding:11px 12px}
+  .ingredient-edit{grid-template-columns:minmax(0,1fr) 78px 40px;gap:7px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .ingredient-edit .ing-name{grid-column:1 / -1;width:100%;box-sizing:border-box}
+  .ingredient-edit .ing-qty{grid-column:1}
+  .ingredient-edit .ing-unit{grid-column:2}
+  .ingredient-edit .ing-cat{grid-column:1 / 3}
+  .ingredient-edit button{grid-column:3;grid-row:2 / 4;width:40px;height:40px}
+  .ingredient-edit input,.ingredient-edit select{min-height:44px;font-size:16px}
+  .ingredient-edit .ing-name{min-height:48px;font-size:16px}
+  .ingredient-edit button{width:40px;height:40px}
+  .bottom{padding-bottom:env(safe-area-inset-bottom);background:rgba(255,255,255,.97)}
+  .nav{width:100%}
+  .nav button{min-height:62px;padding:8px 3px 6px;font-size:10px}
+  .icon{width:38px;height:32px;font-size:19px;margin-bottom:2px}
+  .modal{align-items:flex-end}
+  .sheet{width:100%;max-width:none;max-height:92vh;border-radius:20px 20px 0 0;padding:14px 12px calc(18px + env(safe-area-inset-bottom))}
+  .sheettop{position:sticky;top:0;background:var(--bg);z-index:2;padding-bottom:8px}
+  .close{min-width:42px;min-height:42px}
+  .primary,.secondary{min-height:42px}
+}
+@media (max-width:380px){
+  .slotlabel{width:44px}
+  .edit{font-size:11px;padding:7px 7px}
+  .mealname{font-size:14px}
+  .ingredient-edit{grid-template-columns:minmax(0,1fr) 70px 38px;gap:6px}
+  .ingredient-edit .ing-name{grid-column:1 / -1}
+  .ingredient-edit .ing-qty{grid-column:1}
+  .ingredient-edit .ing-unit{grid-column:2}
+  .ingredient-edit .ing-cat{grid-column:1 / 3}
+  .ingredient-edit button{grid-column:3;grid-row:2 / 4;width:38px;height:38px}
+}
+
+/* CHLOVAN TO-DO — shared visual language */
+.todo-wrap{padding-bottom:4px}.todo-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.todo-stat{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:12px;box-shadow:var(--shadow)}.todo-stat b{display:block;font-size:22px}.todo-stat span{font-size:11px;color:var(--muted)}
+.todo-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px;margin:9px 0;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr auto;gap:10px}.todo-card.late{border-left:5px solid var(--danger)}.todo-card.running{border-left:5px solid #d9a72c}.todo-card h3{margin:0 0 7px;font-size:16px}.todo-meta{display:flex;gap:6px;flex-wrap:wrap;color:var(--muted);font-size:11px}.todo-pill{padding:4px 8px;border-radius:999px;background:var(--accent2)}.todo-late{color:var(--danger);font-weight:800}.todo-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center}.todo-actions button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px}.todo-actions .primary{background:var(--accent);color:#fff;border-color:var(--accent)}.todo-actions .danger{color:var(--danger)}.todo-composer{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px;margin-bottom:12px;box-shadow:var(--shadow)}.todo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.todo-field label{display:block;font-size:10px;color:var(--muted);margin:0 0 4px}.todo-field input,.todo-field select{width:100%;min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px}.todo-full{grid-column:1/-1}.todo-filters{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.todo-banner{background:#fff7d6;border:1px solid #ecd98a;border-radius:15px;padding:13px;margin-bottom:12px}.todo-empty{text-align:center;padding:28px 12px;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:15px}.todo-modal .sheet{max-height:92vh}.todo-busy{opacity:.65;pointer-events:none}.todo-refresh{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 10px;color:var(--muted)}
+@media(max-width:600px){.todo-stats{grid-template-columns:repeat(3,1fr)}.todo-card{grid-template-columns:1fr}.todo-actions{justify-content:flex-start}.todo-grid,.todo-filters{grid-template-columns:1fr}.todo-full{grid-column:auto}.todo-actions button{min-height:40px}.todo-card h3{font-size:15px}}
+
+.todo-running-banner{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin:0 0 12px;box-shadow:var(--shadow)}.todo-running-summary{display:flex;align-items:center;gap:9px}.todo-running-summary b{display:block;font-size:13px}.todo-running-summary span:not(.todo-running-dot){display:block;font-size:11px;color:var(--muted);margin-top:2px}.todo-running-dot{width:9px;height:9px;border-radius:50%;background:#d9a72c;box-shadow:0 0 0 4px #fff4cc;flex:0 0 auto}.todo-running-list{display:grid;gap:6px;margin-top:8px}.todo-running-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:7px;border-top:1px solid var(--line);font-size:12px}.todo-running-item>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.todo-running-item>div{display:flex;gap:5px;flex-shrink:0}.mini{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 8px;font-size:10px;font-weight:700}.mini.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.todo-running-label{color:#9a7410;font-weight:800}.todo-section-head{display:flex;align-items:center;justify-content:space-between}.todo-section-head>div{display:flex;gap:5px}.todo-section-head .todo-refresh{font-size:10px;padding:6px 8px}
+@media(max-width:600px){.todo-running-banner{padding:10px;margin-bottom:10px}.todo-running-item{align-items:flex-start}.todo-running-item>div{gap:4px}.mini{min-height:34px;padding:5px 7px}.todo-card{padding:12px;margin:8px 0}.todo-actions{gap:5px}.todo-actions button{min-height:38px;padding:7px 9px}.todo-section-head{align-items:flex-start;gap:8px}.todo-section-head>div{flex-shrink:0}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand">CHLOVAN</div><h1 id="title">Mon menu</h1><div id="archiveShortcut" style="margin-top:8px"><button class="secondary" onclick="setScreen('archives')">🗂️ Archives</button></div></header>
+<div class="weekbar" id="weekbar"></div>
+<main>
+<section id="planning" class="screen active"></section>
+<section id="courses" class="screen"></section>
+<section id="meals" class="screen"></section>
+<section id="archives" class="screen"></section>
+<section id="do" class="screen"></section>
+<section id="todo" class="screen"></section>
+</main>
+</div>
+
+<div id="todoEditModal" class="modal todo-modal"><div class="sheet">
+<div class="sheettop"><div><div class="brand">TO DO</div><h2 id="todoModalTitle" style="margin:4px 0 0">Modifier la tâche</h2></div><button class="close" onclick="todoCloseEdit()">✕</button></div>
+<div id="todoEditForm" style="margin-top:10px"></div><div class="actions" style="justify-content:flex-end;margin-top:12px"><button class="secondary" onclick="todoCloseEdit()">Annuler</button><button class="primary" onclick="todoSaveEdit()">Enregistrer</button></div>
+</div></div>
+<div class="bottom"><div class="nav">
+<button data-screen="planning" class="active"><span class="icon">📅</span>MENU</button>
+<button data-screen="meals"><span class="icon">🍽️</span>REPAS</button>
+<button data-screen="courses"><span class="icon">🛒</span>COURSE</button>
+<button data-screen="do"><span class="icon">✨</span>À FAIRE ?</button>
+<button data-screen="todo"><span class="icon">✓</span>TO DO</button>
+</div></div>
+<div id="modal" class="modal"><div class="sheet">
+<div class="sheettop"><div><div class="brand">CHOISIR UN REPAS</div><h2 id="modalTitle" style="margin:4px 0 0">—</h2></div><button class="close" onclick="closeModal()">✕</button></div>
+<p class="muted">Les recettes sont intégrées directement dans l’application.</p>
+<input id="mealSearch" class="search" placeholder="Rechercher un repas…" oninput="renderMealChoices()">
+<div id="mealChoices" class="meal-list"></div>
+</div></div>
+<div id="toast" class="toast"></div>
+
+<script>
+const DB = {"days": ["LUNDI", "MARDI", "MERCREDI", "JEUDI", "VENDREDI", "SAMEDI", "DIMANCHE"], "weeks": [{"label": "du 31/08 au 06/09", "lunch": [null, null, null, null, null, null, null], "dinner": [null, null, null, null, null, null, null]}, {"label": "du 07/09 au 13/09", "lunch": [null, null, null, null, null, "Carottes rapées + pates", null], "dinner": [null, null, null, null, "Carottes rapées", null, null]}], "ingredients": [{"plat": "Bagel ( pesto + poivrons )", "ingredient": "poivrons", "quantity": 200, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Bagel ( pesto + poivrons )", "ingredient": "pesto", "quantity": 6, "unit": "cas", "category": "Epicerie"}, {"plat": "Bagel ( pesto + poivrons )", "ingredient": "pain a bagel", "quantity": 4, "unit": "unité", "category": "Epicerie"}, {"plat": "Bagel ( pesto + poivrons )", "ingredient": "ail", "quantity": 1, "unit": "gousse", "category": "Fruits et légumes"}, {"plat": "Camenbert au four", "ingredient": "camembert", "quantity": 2, "unit": "unité", "category": "Produits frais"}, {"plat": "Camenbert au four", "ingredient": "miel", "quantity": 2, "unit": "cac", "category": "Epicerie"}, {"plat": "Camenbert au four", "ingredient": "herbe de provence", "quantity": 3, "unit": "cac", "category": "Epicerie"}, {"plat": "Carottes rappées", "ingredient": "carotte", "quantity": 6, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Chili sin carne", "ingredient": "haricots rouge", "quantity": 300, "unit": "g", "category": "Epicerie"}, {"plat": "Chili sin carne", "ingredient": "mais", "quantity": 250, "unit": "g", "category": "Epicerie"}, {"plat": "Chili sin carne", "ingredient": "riz", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Chili sin carne", "ingredient": "tomacoulis", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Chili sin carne", "ingredient": "tomate conserve", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Chili sin carne", "ingredient": "oignon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Choux de Bruxelles", "ingredient": "choux de bruxelles", "quantity": 400, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Choux de Bruxelles", "ingredient": "oignons", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Courge au four", "ingredient": "courge", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Couscous", "ingredient": "Semoule", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Couscous", "ingredient": "courgette", "quantity": 3, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Couscous", "ingredient": "pois chiche", "quantity": 250, "unit": "g", "category": "Epicerie"}, {"plat": "Couscous", "ingredient": "carotte", "quantity": 3, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Couscous", "ingredient": "celeri", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Couscous", "ingredient": "navet", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Couscous", "ingredient": "ras el hammout", "quantity": 6, "unit": "cas", "category": "Fruits et légumes"}, {"plat": "Couscous", "ingredient": "oignon", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Couscous", "ingredient": "tomate", "quantity": 4, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Croque monsieur", "ingredient": "pain de mie", "quantity": 16, "unit": "tranches", "category": "Epicerie"}, {"plat": "Croque monsieur", "ingredient": "gruyere", "quantity": 300, "unit": "g", "category": "Produits frais"}, {"plat": "Croque monsieur", "ingredient": "chèvre", "quantity": 2, "unit": "unité", "category": "Produits frais"}, {"plat": "Croque monsieur", "ingredient": "creme", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Dahl de lentille", "ingredient": "lentille corail", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Dahl de lentille", "ingredient": "curry", "quantity": 6, "unit": "cas", "category": "Epicerie"}, {"plat": "Dahl de lentille", "ingredient": "patate douce", "quantity": 2, "unit": "Unité", "category": "Fruits et légumes"}, {"plat": "Dahl de lentille", "ingredient": "pois chiche", "quantity": 250, "unit": "g", "category": "Epicerie"}, {"plat": "Dahl de lentille", "ingredient": "tomacoulis", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Dahl de lentille", "ingredient": "tomate conserve", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Fajitas", "ingredient": "courgette", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Fajitas", "ingredient": "boite à fajitas", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Fajitas", "ingredient": "oignons", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Fajitas", "ingredient": "poivrons", "quantity": 400, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Fajitas", "ingredient": "gruyere", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Fajitas", "ingredient": "avocat", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Fajitas", "ingredient": "salade", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Fajitas", "ingredient": "creme", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Fondue de poireaux", "ingredient": "creme", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Fondue de poireaux", "ingredient": "creme de coco", "quantity": 400, "unit": "g", "category": "Epicerie"}, {"plat": "Fondue de poireaux", "ingredient": "poireaux", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Fondue de poireaux", "ingredient": "champignon", "quantity": 500, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Fondue de poireaux", "ingredient": "riz", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Fondue de poireaux", "ingredient": "oignon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Frittes", "ingredient": "Pomme de terre", "quantity": 2500, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Gaspacho", "ingredient": "Tomate", "quantity": 1000, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Gaspacho", "ingredient": "concombre", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Gaspacho", "ingredient": "oignon rouge", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Gaspacho", "ingredient": "ail", "quantity": 1, "unit": "gousse", "category": "Fruits et légumes"}, {"plat": "Gaspacho", "ingredient": "poivron", "quantity": 200, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Gnocchi pesto", "ingredient": "Gnocchi", "quantity": 1000, "unit": "g", "category": "Epicerie"}, {"plat": "Gnocchi pesto", "ingredient": "pesto", "quantity": 6, "unit": "cas", "category": "Epicerie"}, {"plat": "Gnocchi pesto", "ingredient": "gruyere", "quantity": 400, "unit": "g", "category": "Produits frais"}, {"plat": "Gratin de choux fleurs", "ingredient": "choux fleur", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Gratin de choux fleurs", "ingredient": "lait", "quantity": 300, "unit": "ml", "category": "Produits frais"}, {"plat": "Gratin de choux fleurs", "ingredient": "beurre", "quantity": 1, "unit": "unité", "category": "Produits frais"}, {"plat": "Gratin de choux fleurs", "ingredient": "farine", "quantity": 300, "unit": "g", "category": "Epicerie"}, {"plat": "Gratin de choux fleurs", "ingredient": "gruyere", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Gyozas", "ingredient": "Gyozas surgelés", "quantity": 1, "unit": "unité", "category": "Produits frais"}, {"plat": "K'sir", "ingredient": "Semoule", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "K'sir", "ingredient": "concentré de tomate", "quantity": 2, "unit": "unité", "category": "Epicerie"}, {"plat": "K'sir", "ingredient": "concentré de poivron", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "K'sir", "ingredient": "cumin", "quantity": 3, "unit": "cas", "category": "Epicerie"}, {"plat": "Lasagne vege", "ingredient": "Lasagne", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Lasagne vege", "ingredient": "lentille corail", "quantity": 250, "unit": "g", "category": "Epicerie"}, {"plat": "Lasagne vege", "ingredient": "champignon", "quantity": 500, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Lasagne vege", "ingredient": "carotte", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Lasagne vege", "ingredient": "Tomacoulis", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Lasagne vege", "ingredient": "lait", "quantity": 500, "unit": "ml", "category": "Produits frais"}, {"plat": "Lasagne vege", "ingredient": "farine", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Lasagne vege", "ingredient": "beurre", "quantity": 1, "unit": "unité", "category": "Produits frais"}, {"plat": "Mafe", "ingredient": "Patate douce", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Mafe", "ingredient": "carotte", "quantity": 3, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Mafe", "ingredient": "dakatine", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Mafe", "ingredient": "tomate conserve", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Mafe", "ingredient": "creme de coco", "quantity": 400, "unit": "ml", "category": "Epicerie"}, {"plat": "Oeufs au plat", "ingredient": "Oeufs", "quantity": 4, "unit": "unité", "category": "Epicerie"}, {"plat": "Oeufs brouillés", "ingredient": "Oeufs", "quantity": 6, "unit": "unité", "category": "Epicerie"}, {"plat": "Oeufs dur", "ingredient": "Oeufs", "quantity": 8, "unit": "unité", "category": "Epicerie"}, {"plat": "Pate au pesto", "ingredient": "pate", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Pate au pesto", "ingredient": "pesto", "quantity": 6, "unit": "cas", "category": "Epicerie"}, {"plat": "Pate bolo", "ingredient": "Pate", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Pate bolo", "ingredient": "Tomacoulis", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Pate bolo", "ingredient": "carotte", "quantity": 3, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Pate bolo", "ingredient": "oignon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Pate bolo", "ingredient": "gruyere", "quantity": 300, "unit": "g", "category": "Produits frais"}, {"plat": "Pate cacio e peppe", "ingredient": "Pate", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Pate cacio e peppe", "ingredient": "poivre", "quantity": 6, "unit": "cas", "category": "Epicerie"}, {"plat": "Pate cacio e peppe", "ingredient": "parmesan", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Pate cacio e peppe", "ingredient": "creme", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Pate carbo", "ingredient": "Pate", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Pate carbo", "ingredient": "lardon vegge", "quantity": 1, "unit": "unité", "category": "Produits frais"}, {"plat": "Pate carbo", "ingredient": "oignon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Pate carbo", "ingredient": "creme", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Pate feta tomate four", "ingredient": "Pate", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Pate feta tomate four", "ingredient": "feta", "quantity": 1, "unit": "unité", "category": "Produits frais"}, {"plat": "Pate feta tomate four", "ingredient": "tomate", "quantity": 4, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Pate feta tomate four", "ingredient": "olives noires", "quantity": 50, "unit": "g", "category": "Epicerie"}, {"plat": "Piyaz", "ingredient": "Haricots blancs", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Piyaz", "ingredient": "yahourt grec", "quantity": 2, "unit": "unité", "category": "Produits frais"}, {"plat": "Piyaz", "ingredient": "vinaigre", "quantity": 1, "unit": "cas", "category": "Epicerie"}, {"plat": "Piyaz", "ingredient": "cumin", "quantity": 3, "unit": "cac", "category": "Epicerie"}, {"plat": "Piyaz", "ingredient": "oignon rouge", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Pizza", "ingredient": "Farine", "quantity": 400, "unit": "g", "category": "Epicerie"}, {"plat": "Pizza", "ingredient": "levure boulangere", "quantity": 1, "unit": "unité", "category": "Produits frais"}, {"plat": "Pizza", "ingredient": "tomacoulis", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Pizza", "ingredient": "olives noires", "quantity": 50, "unit": "g", "category": "Epicerie"}, {"plat": "Pizza", "ingredient": "velours de bleu", "quantity": 1, "unit": "unité", "category": "Produits frais"}, {"plat": "Pizza", "ingredient": "gruyere", "quantity": 300, "unit": "g", "category": "Produits frais"}, {"plat": "Pizza", "ingredient": "mozza rapée", "quantity": 250, "unit": "g", "category": "Produits frais"}, {"plat": "Poke", "ingredient": "riz", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Poke", "ingredient": "vinaigre de riz", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Poke", "ingredient": "mangue", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Poke", "ingredient": "oignon rouge", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Poke", "ingredient": "avocat", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Poke", "ingredient": "concombre", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Poke", "ingredient": "mais", "quantity": 200, "unit": "g", "category": "Epicerie"}, {"plat": "Pomme de terre sautées", "ingredient": "Pomme de terre", "quantity": 1000, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Pomme de terre sautées", "ingredient": "ail", "quantity": 2, "unit": "gousse", "category": "Fruits et légumes"}, {"plat": "Quiche champignons", "ingredient": "Farine", "quantity": 200, "unit": "g", "category": "Epicerie"}, {"plat": "Quiche champignons", "ingredient": "beurre", "quantity": 100, "unit": "g", "category": "Produits frais"}, {"plat": "Quiche champignons", "ingredient": "champignon", "quantity": 400, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Quiche champignons", "ingredient": "oignon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Quiche champignons", "ingredient": "gruyere", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Quiche champignons", "ingredient": "oeufs", "quantity": 3, "unit": "unité", "category": "Epicerie"}, {"plat": "Quiche champignons", "ingredient": "creme", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Quiche chèvre", "ingredient": "Farine", "quantity": 200, "unit": "g", "category": "Epicerie"}, {"plat": "Quiche chèvre", "ingredient": "beurre", "quantity": 100, "unit": "g", "category": "Produits frais"}, {"plat": "Quiche chèvre", "ingredient": "champignon", "quantity": 400, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Quiche chèvre", "ingredient": "oignon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Quiche chèvre", "ingredient": "gruyere", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Quiche chèvre", "ingredient": "oeufs", "quantity": 3, "unit": "unité", "category": "Epicerie"}, {"plat": "Quiche chèvre", "ingredient": "creme", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Quiche chèvre", "ingredient": "chèvre", "quantity": 1, "unit": "unité", "category": "Produits frais"}, {"plat": "Quiche poireaux", "ingredient": "Farine", "quantity": 200, "unit": "g", "category": "Epicerie"}, {"plat": "Quiche poireaux", "ingredient": "beurre", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Quiche poireaux", "ingredient": "poireaux", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Quiche poireaux", "ingredient": "oignon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Quiche poireaux", "ingredient": "gruyere", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Quiche poireaux", "ingredient": "oeufs", "quantity": 3, "unit": "unité", "category": "Epicerie"}, {"plat": "Quiche poireaux", "ingredient": "creme", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Quinoa", "ingredient": "Quinoa", "quantity": 400, "unit": "g", "category": "Epicerie"}, {"plat": "Raclette", "ingredient": "Fromage à raclette", "quantity": 600, "unit": "g", "category": "Produits frais"}, {"plat": "Raclette", "ingredient": "pomme de terre", "quantity": 2500, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Risotto", "ingredient": "Riz pour risotto", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Risotto", "ingredient": "creme", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Risotto", "ingredient": "champignon", "quantity": 500, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Risotto", "ingredient": "oignon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Risotto", "ingredient": "parmesan", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Riz yassa", "ingredient": "Riz", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Riz yassa", "ingredient": "citron", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Riz yassa", "ingredient": "olives vertes", "quantity": 100, "unit": "g", "category": "Epicerie"}, {"plat": "Riz yassa", "ingredient": "oignon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de carotte", "ingredient": "Carotte", "quantity": 6, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de concombre", "ingredient": "concombre", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de concombre", "ingredient": "creme", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Salade de concombre", "ingredient": "ciboulette", "quantity": 2, "unit": "cac", "category": "Fruits et légumes"}, {"plat": "Salade de figue", "ingredient": "Figue", "quantity": 400, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Salade de légumes rotis", "ingredient": "Pois chiche", "quantity": 250, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de légumes rotis", "ingredient": "carotte", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de légumes rotis", "ingredient": "courge", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de légumes rotis", "ingredient": "boulgour", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de lentilles", "ingredient": "Lentilles", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de lentilles", "ingredient": "oignon rouge", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de lentilles", "ingredient": "feta", "quantity": 2, "unit": "unité", "category": "Produits frais"}, {"plat": "Salade de lentilles", "ingredient": "oilves noires", "quantity": 100, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de melon", "ingredient": "Melon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de melon", "ingredient": "feta", "quantity": 2, "unit": "unité", "category": "Produits frais"}, {"plat": "Salade de melon", "ingredient": "olives noires", "quantity": 50, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de pastèque", "ingredient": "Pastèque", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de pastèque", "ingredient": "feta", "quantity": 2, "unit": "unité", "category": "Produits frais"}, {"plat": "Salade de pastèque", "ingredient": "olives noires", "quantity": 50, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de pate", "ingredient": "Pate", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de pate", "ingredient": "oignon rouge", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de pate", "ingredient": "pois chiche", "quantity": 250, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de pate", "ingredient": "tomate", "quantity": 3, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de pate", "ingredient": "concombre", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de pate", "ingredient": "mais", "quantity": 250, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de pate", "ingredient": "olives noires", "quantity": 50, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de pomme de terre", "ingredient": "Pomme de terre", "quantity": 2500, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Salade de pomme de terre", "ingredient": "oeufs", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Salade de pomme de terre", "ingredient": "oignon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de pomme de terre", "ingredient": "huile tournesole", "quantity": 200, "unit": "ml", "category": "Epicerie"}, {"plat": "Salade de pomme de terre", "ingredient": "ail", "quantity": 1, "unit": "gousse", "category": "Fruits et légumes"}, {"plat": "Salade de riz", "ingredient": "Riz", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de riz", "ingredient": "oignon rouge", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de riz", "ingredient": "pois chiche", "quantity": 250, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de riz", "ingredient": "tomate", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de riz", "ingredient": "concombre", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Salade de riz", "ingredient": "mais", "quantity": 250, "unit": "g", "category": "Epicerie"}, {"plat": "Salade de riz", "ingredient": "olives noires", "quantity": 100, "unit": "g", "category": "Epicerie"}, {"plat": "Sandwichs Tomate pesto fromage", "ingredient": "Pain à sandwich", "quantity": 4, "unit": "unité", "category": "Epicerie"}, {"plat": "Sandwichs Tomate pesto fromage", "ingredient": "Tomate", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Sandwichs Tomate pesto fromage", "ingredient": "Pesto", "quantity": 6, "unit": "cas", "category": "Epicerie"}, {"plat": "Sandwichs Tomate pesto fromage", "ingredient": "Saint moret", "quantity": 250, "unit": "g", "category": "Produits frais"}, {"plat": "Soupe de légume", "ingredient": "Pomme de terre", "quantity": 600, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Soupe de légume", "ingredient": "carotte", "quantity": 4, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Soupe de légume", "ingredient": "poireaux", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Sushi", "ingredient": "riz à sushi", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Sushi", "ingredient": "vinaigre de riz", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Sushi", "ingredient": "concombre", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Sushi", "ingredient": "saint moret", "quantity": 250, "unit": "g", "category": "Produits frais"}, {"plat": "Sushi", "ingredient": "avocat", "quantity": 3, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Sushi", "ingredient": "carotte", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Sushi", "ingredient": "feuille d'algue", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Sushi", "ingredient": "sauce soja sucré", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Taboulé", "ingredient": "Semoule", "quantity": 500, "unit": "g", "category": "Epicerie"}, {"plat": "Taboulé", "ingredient": "concentré de tomate", "quantity": 1, "unit": "unité", "category": "Epicerie"}, {"plat": "Taboulé", "ingredient": "mais", "quantity": 250, "unit": "g", "category": "Epicerie"}, {"plat": "Taboulé", "ingredient": "concombre", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Taboulé", "ingredient": "tomate", "quantity": 3, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Tajine", "ingredient": "fruit à tajine", "quantity": 400, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Tajine", "ingredient": "pomme de terre", "quantity": 400, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Tajine", "ingredient": "courgette", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Tajine", "ingredient": "carotte", "quantity": 3, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Tajine", "ingredient": "pois chiche", "quantity": 400, "unit": "g", "category": "Epicerie"}, {"plat": "Tarte à la tomate", "ingredient": "beurre", "quantity": 100, "unit": "g", "category": "Produits frais"}, {"plat": "Tarte à la tomate", "ingredient": "farine", "quantity": 200, "unit": "g", "category": "Epicerie"}, {"plat": "Tarte à la tomate", "ingredient": "moutarde", "quantity": 4, "unit": "cas", "category": "Epicerie"}, {"plat": "Tarte à la tomate", "ingredient": "oignon", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Tarte à la tomate", "ingredient": "tomate", "quantity": 5, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Tartiflette", "ingredient": "Fromage à tartiflette", "quantity": 2, "unit": "unité", "category": "Produits frais"}, {"plat": "Tartiflette", "ingredient": "pomme de terre", "quantity": 1000, "unit": "g", "category": "Fruits et légumes"}, {"plat": "Tartiflette", "ingredient": "oignon", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Tartine chèvre miel", "ingredient": "Pain pour tartine", "quantity": 12, "unit": "unité", "category": "Epicerie"}, {"plat": "Tartine chèvre miel", "ingredient": "chèvre", "quantity": 1, "unit": "unité", "category": "Produits frais"}, {"plat": "Tartine chèvre miel", "ingredient": "miel", "quantity": 3, "unit": "cas", "category": "Epicerie"}, {"plat": "Tartine chèvre miel", "ingredient": "creme", "quantity": 200, "unit": "g", "category": "Produits frais"}, {"plat": "Tian de légume", "ingredient": "Aubergine", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Tian de légume", "ingredient": "ail", "quantity": 2, "unit": "gousse", "category": "Fruits et légumes"}, {"plat": "Tian de légume", "ingredient": "courgette", "quantity": 3, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Tian de légume", "ingredient": "tomate", "quantity": 4, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Tomate Mozza/ burrata", "ingredient": "Tomate", "quantity": 6, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Tomate Mozza/ burrata", "ingredient": "burrata/mozza", "quantity": 1, "unit": "unité", "category": "Produits frais"}, {"plat": "Wrap", "ingredient": "wraps", "quantity": 8, "unit": "unité", "category": "Epicerie"}, {"plat": "Wrap", "ingredient": "saint moret", "quantity": 250, "unit": "g", "category": "Produits frais"}, {"plat": "Wrap", "ingredient": "mais", "quantity": 250, "unit": "g", "category": "Epicerie"}, {"plat": "Wrap", "ingredient": "concombre", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Wrap", "ingredient": "échalotte", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Wrap Boulgour", "ingredient": "wraps", "quantity": 8, "unit": "unité", "category": "Epicerie"}, {"plat": "Wrap Boulgour", "ingredient": "saint moret", "quantity": 250, "unit": "g", "category": "Produits frais"}, {"plat": "Wrap Boulgour", "ingredient": "boulgour", "quantity": 400, "unit": "g", "category": "Epicerie"}, {"plat": "Wrap Boulgour", "ingredient": "Patate douce", "quantity": 2, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Wrap Boulgour", "ingredient": "yahourt grec", "quantity": 2, "unit": "unité", "category": "Produits frais"}, {"plat": "Wrap Boulgour", "ingredient": "vinaigre", "quantity": 2, "unit": "cac", "category": "Epicerie"}, {"plat": "Wrap Boulgour", "ingredient": "oignon rouge", "quantity": 1, "unit": "unité", "category": "Fruits et légumes"}, {"plat": "Wrap Boulgour", "ingredient": "mais", "quantity": 200, "unit": "g", "category": "Epicerie"}, {"plat": "Wrap Boulgour", "ingredient": "tomate", "quantity": 3, "unit": "unité", "category": "Fruits et légumes"}], "meals": ["Bagel ( pesto + poivrons )", "Camenbert au four", "Carottes rappées", "Chili sin carne", "Choux de Bruxelles", "Courge au four", "Couscous", "Croque monsieur", "Dahl de lentille", "Fajitas", "Fondue de poireaux", "Frittes", "Gaspacho", "Gnocchi pesto", "Gratin de choux fleurs", "Gyozas", "K'sir", "Lasagne vege", "Mafe", "Oeufs au plat", "Oeufs brouillés", "Oeufs dur", "Pate au pesto", "Pate bolo", "Pate cacio e peppe", "Pate carbo", "Pate feta tomate four", "Piyaz", "Pizza", "Poke", "Pomme de terre sautées", "Quiche champignons", "Quiche chèvre", "Quiche poireaux", "Quinoa", "Raclette", "Risotto", "Riz yassa", "Salade de carotte", "Salade de concombre", "Salade de figue", "Salade de lentilles", "Salade de légumes rotis", "Salade de melon", "Salade de pastèque", "Salade de pate", "Salade de pomme de terre", "Salade de riz", "Sandwichs Tomate pesto fromage", "Soupe de légume", "Sushi", "Taboulé", "Tajine", "Tarte à la tomate", "Tartiflette", "Tartine chèvre miel", "Tian de légume", "Tomate Mozza/ burrata", "Wrap", "Wrap Boulgour"], "categoryOrder": ["Fruits et légumes", "Epicerie", "Produits frais"], "specialExclusions": ["reste", "repas exterieur", "repas extérieur", ""], "initial": {"0-0-midi": "", "0-0-soir": "", "0-1-midi": "", "0-1-soir": "", "0-2-midi": "", "0-2-soir": "", "0-3-midi": "", "0-3-soir": "", "0-4-midi": "", "0-4-soir": "", "0-5-midi": "", "0-5-soir": "", "0-6-midi": "", "0-6-soir": "", "1-0-midi": "", "1-0-soir": "", "1-1-midi": "", "1-1-soir": "", "1-2-midi": "", "1-2-soir": "", "1-3-midi": "", "1-3-soir": "", "1-4-midi": "", "1-4-soir": "Carottes rapées", "1-5-midi": "Carottes rapées + pates", "1-5-soir": "", "1-6-midi": "", "1-6-soir": ""}};
+const STORAGE_MENU="chlovan-menu-v1";
+const STORAGE_CHECKED="chlovan-checked-v1";
+const STORAGE_WEEKS="chlovan-weeks-v1";
+const STORAGE_ARCHIVE="chlovan-archives-v1";
+
+function isoDate(d){return d.toISOString().slice(0,10)}
+function mondayOf(d){
+  const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  const day=x.getDay();
+  x.setDate(x.getDate() + (day===0 ? -6 : 1-day));
+  return x;
+}
+function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+function weekLabel(monday){
+  const sunday=addDays(monday,6);
+  const f=d=>String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
+  return `du ${f(monday)} au ${f(sunday)}`;
+}
+function emptyWeekMenu(){
+  const m={};
+  for(let i=0;i<7;i++){m[`${i}-midi`]='';m[`${i}-soir`]='';m[`${i}-midi-2`]='';m[`${i}-soir-2`]='';}
+  return m;
+}
+function getStoredWeeks(){
+  try{return JSON.parse(localStorage.getItem(STORAGE_WEEKS)||"{}")||{}}catch(e){return {}}
+}
+function setStoredWeeks(v){localStorage.setItem(STORAGE_WEEKS,JSON.stringify(v))}
+function getArchives(){
+  try{return JSON.parse(localStorage.getItem(STORAGE_ARCHIVE)||"[]")||[]}catch(e){return []}
+}
+function setArchives(v){localStorage.setItem(STORAGE_ARCHIVE,JSON.stringify(v))}
+
+function archiveWeek(key,label,menu){
+  if(!menu || Object.values(menu).every(v=>!v)) return;
+  const archives=getArchives();
+  if(archives.some(a=>a.key===key)) return;
+  archives.unshift({key,label,menu:{...menu},archivedAt:new Date().toISOString()});
+  setArchives(archives);
+}
+
+function ensureCurrentWeeks(){
+  let weeks=getStoredWeeks();
+  const now=new Date();
+  const current=mondayOf(now);
+  const next=addDays(current,7);
+  const keys=[isoDate(current),isoDate(next)];
+
+  // Migration of the previous V1 data: keep it safely in the archive rather than losing it.
+  if(!localStorage.getItem(STORAGE_WEEKS)){
+    const oldMenu=JSON.parse(localStorage.getItem(STORAGE_MENU)||"null");
+    if(oldMenu){
+      archiveWeek('legacy-'+Date.now(),'Ancien menu V1',{
+        ...Object.fromEntries(Object.entries(oldMenu).map(([k,v])=>[k.replace(/^0-/,'0-'),v]))
+      });
+    }
+    weeks={};
+  }
+
+  // Every time the calendar moves forward, the old current week is retained as an archive.
+  const previousKeys=Object.keys(weeks).sort();
+  for(const key of previousKeys){
+    if(!keys.includes(key)){
+      archiveWeek(key,weekLabel(new Date(key+'T00:00:00')),weeks[key]);
+      delete weeks[key];
+    }
+  }
+  for(const key of keys){if(!weeks[key]) weeks[key]=emptyWeekMenu();}
+  setStoredWeeks(weeks);
+  localStorage.setItem(STORAGE_MENU,JSON.stringify(weeks[keys[0]]));
+  return {currentKey:keys[0],nextKey:keys[1],weeks};
+}
+
+const calendar=ensureCurrentWeeks();
+const state = {
+  week: 0,
+  screen: "planning",
+  menu: calendar.weeks[calendar.currentKey],
+  checked: JSON.parse(localStorage.getItem(STORAGE_CHECKED) || "{}"),
+  editingKey: null,
+  weekKeys: [calendar.currentKey,calendar.nextKey]
+};
+function save(){
+  const weeks=getStoredWeeks();
+  weeks[state.weekKeys[state.week]]=state.menu;
+  setStoredWeeks(weeks);
+  localStorage.setItem(STORAGE_MENU,JSON.stringify(state.menu));
+  localStorage.setItem(STORAGE_CHECKED,JSON.stringify(state.checked));
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+function jsAttr(s){return JSON.stringify(String(s)).replace(/"/g,"&quot;");}
+function showToast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1500)}
+function loadCustomRecipes(){
+  try{
+    const custom=JSON.parse(localStorage.getItem("chlovan-custom-recipes")||"[]")||[];
+    for(const r of custom){
+      if(!DB.meals.some(m=>norm(m)===norm(r.name))) DB.meals.push(r.name);
+      for(const ing of (r.ingredients||[])){
+        if(!DB.ingredients.some(x=>norm(x.plat)===norm(r.name)&&norm(x.ingredient)===norm(ing.ingredient)&&Number(x.quantity)===Number(ing.quantity)&&norm(x.unit)===norm(ing.unit))) DB.ingredients.push({...ing,plat:r.name});
+      }
+    }
+  }catch(e){}
+}
+function saveCustomRecipes(list){localStorage.setItem("chlovan-custom-recipes",JSON.stringify(list))}
+function getCustomRecipes(){try{return JSON.parse(localStorage.getItem("chlovan-custom-recipes")||"[]")||[]}catch(e){return []}}
+function init(){
+  loadCustomRecipes();
+  renderWeekBar();
+  document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>setScreen(b.dataset.screen));
+  updateWeekbarVisibility();
+  render();
+}
+function updateWeekbarVisibility(){document.getElementById("weekbar").style.display=(state.screen==="planning"||state.screen==="courses")?"flex":"none";document.getElementById("archiveShortcut").style.display=state.screen==="planning"?"block":"none";}
+function renderWeekBar(){
+  const wb=document.getElementById("weekbar");
+  wb.innerHTML=state.weekKeys.map((key,i)=>{
+    const label=i===0?'Semaine en cours':'Semaine prochaine';
+    const dates=weekLabel(new Date(key+'T00:00:00')).replace("du ","");
+    return `<button class="weekbtn ${i===state.week?'active':''}" onclick="setWeek(${i})">${label}<br><span style="font-size:11px;opacity:.75">${esc(dates)}</span></button>`;
+  }).join("");
+}
+function setWeek(i){
+  state.week=i;
+  const weeks=getStoredWeeks();
+  state.menu=weeks[state.weekKeys[i]] || emptyWeekMenu();
+  localStorage.setItem(STORAGE_MENU,JSON.stringify(state.menu));
+  document.querySelectorAll(".weekbtn").forEach((b,j)=>b.classList.toggle("active",j===i));
+  render();
+}
+function setScreen(s){state.screen=s;document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(s).classList.add("active");document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.screen===s));updateWeekbarVisibility();document.getElementById("title").textContent=s==="planning"?"Mon menu":s==="meals"?"Mes repas":s==="courses"?"Ma course":s==="do"?"Que puis-je faire ?":s==="todo"?"Mes tâches":"Archives";render();if(s==="todo")todoRender();if(s==="do")todoRenderDo();window.scrollTo({top:0,behavior:"smooth"});}
+function render(){if(state.screen==="planning")renderPlanning();if(state.screen==="courses")renderCourses();if(state.screen==="meals")renderMeals();if(state.screen==="archives")renderArchives();if(state.screen==="todo")todoRender();if(state.screen==="do")todoRenderDo();}
+function renderPlanning(){
+  const monday=new Date(state.weekKeys[state.week]+'T00:00:00');
+  const label=weekLabel(monday), root=document.getElementById("planning");
+  root.innerHTML = `<div class="section-title">${esc(label)}</div>` + DB.days.map((d,i)=>{
+    const km=`${i}-midi`, ks=`${i}-soir`;
+    const a=state.menu[km]||"", b=state.menu[ks]||"";
+    return `<div class="day"><div class="dayhead">${d}</div>${slot("☀️","Midi",a,km)}${slot("🌙","Soir",b,ks)}</div>`;
+  }).join("");
+}
+function slot(icon,label,name,key){
+  const second=state.menu[key+'-2']||"";
+  const canAdd=!!name && !second;
+  const firstLine=name
+    ? `<div class="meal-line"><button class="mealname meal-link" onclick="showMealDetail(${jsAttr(name)})">${esc(name)}</button><div class="meal-actions"><button class="edit" onclick="openMeal('${key}',0)">Modifier</button>${canAdd?`<button class="add-meal" title="Ajouter un deuxième plat" onclick="openMeal('${key}',1)">+</button>`:""}</div></div>`
+    : `<div class="meal-line"><div class="mealname empty">Ajouter un repas</div><button class="edit" onclick="openMeal('${key}',0)">Ajouter</button></div>`;
+  const secondLine=second
+    ? `<div class="meal-line"><button class="mealname meal-link" onclick="showMealDetail(${jsAttr(second)})">${esc(second)}</button><div class="meal-actions"><button class="edit" onclick="openMeal('${key}',1)">Modifier</button></div></div>`
+    : "";
+  return `<div class="slot"><div class="slotlabel">${icon}<br>${label}</div><div class="meal"><div class="meal-lines">${firstLine}${secondLine}</div></div></div>`;
+}
+function openMeal(key,index=0){state.editingKey=key;state.editingIndex=index;document.getElementById("modalTitle").textContent="Repas";document.getElementById("mealSearch").value="";document.getElementById("mealSearch").style.display="block";renderMealChoices();document.getElementById("modal").classList.add("show");}
+function closeModal(){document.getElementById("modal").classList.remove("show");document.getElementById("mealSearch").style.display="block"}
+function renderMealChoices(){
+ const q=document.getElementById("mealSearch").value.toLowerCase().trim();
+ const vals=DB.meals.filter(x=>x.toLowerCase().includes(q));
+ document.getElementById("mealChoices").innerHTML =
+ `<button class="meal-option" onclick="chooseMeal('')">❌ Aucun repas / vider ce créneau</button>`+
+ vals.map(m=>`<button class="meal-option" onclick="chooseMeal(${jsAttr(m)})">${esc(m)}</button>`).join("");
+}
+function chooseMeal(m){
+ const key=state.editingKey, idx=state.editingIndex||0;
+ if(idx===0){ if(m){state.menu[key]=m;} else {state.menu[key]=state.menu[key+'-2']||''; state.menu[key+'-2']='';} } else {state.menu[key+'-2']=m;}
+ save();closeModal();renderPlanning();showToast("Menu mis à jour");
+}
+function norm(x){return String(x||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");}
+function isExcluded(m){return !m || ["reste","repas extérieur","repas exterieur"].includes(norm(m));}
+function calcCourses(){
+  const map=new Map();
+  for(const key of Object.keys(state.menu)){
+    const meal=state.menu[key];
+    if(isExcluded(meal)) continue;
+    for(const ing of DB.ingredients){
+      if(norm(ing.plat)!==norm(meal)) continue;
+      const id=norm(ing.category)+"|"+norm(ing.ingredient)+"|"+norm(ing.unit);
+      if(!map.has(id)) map.set(id,{category:ing.category,ingredient:ing.ingredient,unit:ing.unit,quantity:0,meals:new Set()});
+      const x=map.get(id);
+      x.quantity += Number(ing.quantity)||0;
+      x.meals.add(meal);
+    }
+  }
+  return [...map.values()].sort((a,b)=>{
+    const ca=DB.categoryOrder.indexOf(a.category), cb=DB.categoryOrder.indexOf(b.category);
+    return (ca<0?999:ca)-(cb<0?999:cb) || a.ingredient.localeCompare(b.ingredient,'fr');
+  });
+}
+function fmtQty(q){return Number.isInteger(q)?String(q):String(Math.round(q*100)/100)}
+function renderCourses(){
+ const root=document.getElementById("courses"),rows=calcCourses();
+ if(!rows.length){root.innerHTML=`<div class="empty-state">Aucun ingrédient à acheter.<br><br>Ajoute des repas dans le menu.</div>`;return}
+ const groups=[];for(const x of rows){let g=groups.find(y=>y.category===x.category);if(!g){g={category:x.category,items:[]};groups.push(g)}g.items.push(x)}
+ root.innerHTML=`<div class="section-title">Liste calculée automatiquement</div><div class="card"><b>${rows.length} ingrédients</b> nécessaires selon le menu actuel.</div>`+groups.map(g=>`<div class="course-cat"><h3>${esc(g.category)}</h3><div class="card" style="padding:0 15px">${g.items.map(x=>{const id=norm(x.category)+"|"+norm(x.ingredient)+"|"+norm(x.unit),checked=!!state.checked[id];return `<label class="course-row ${checked?'checked':''}"><input type="checkbox" ${checked?'checked':''} onchange="toggleCheck(${JSON.stringify(id)})"><div class="course-main"><div><span class="qty">${fmtQty(x.quantity)} ${esc(x.unit)}</span> — ${esc(x.ingredient)}</div><div class="source">${[...x.meals].map(esc).join(" · ")}</div></div></label>`}).join("")}</div></div>`).join("");
+}
+function toggleCheck(id){state.checked[id]=!state.checked[id];save();renderCourses();}
+function renderMeals(){
+ const root=document.getElementById("meals");
+ const selected=getSelectedWeekMeals();
+ root.innerHTML=`<div class="section-title">Bibliothèque des recettes</div><div class="card recipe-add"><div><h2 style="margin:0 0 4px">${DB.meals.length} recettes</h2><div class="muted">Toutes tes recettes sont disponibles ici.</div></div><button class="primary" onclick="openAddRecipe()">+</button></div><input class="search" placeholder="Rechercher une recette…" oninput="filterMeals(this.value)"><div id="mealLibrary" class="meal-list"></div>`;
+ filterMeals("");
+}
+function getSelectedWeekMeals(){
+ return [...new Set(Object.values(state.menu).flatMap(v=>Array.isArray(v)?v:[v]).filter(m=>!isExcluded(m)))];
+}
+function filterMeals(q){
+ q=(q||"").toLowerCase().trim();
+ const arr=DB.meals.filter(m=>m.toLowerCase().includes(q));
+ document.getElementById("mealLibrary").innerHTML=arr.map(m=>`<button class="meal-option" onclick="showMealDetail(${jsAttr(m)})"><b>${esc(m)}</b></button>`).join("");
+}
+function openAddRecipe(){
+ document.getElementById("modalTitle").textContent="Nouvelle recette";
+ document.getElementById("mealSearch").style.display="none";
+ document.getElementById("mealChoices").innerHTML=`<div class="card"><input id="newRecipeName" class="search" placeholder="Nom de la recette"><h3>Ingrédients</h3><div id="ingredientRows"></div><button class="secondary" onclick="addIngredientRow()">+ Ajouter un ingrédient</button></div><button class="primary" onclick="saveNewRecipe()">Enregistrer la recette</button>`;
+ document.getElementById("modal").classList.add("show");
+ addIngredientRow();
+}
+function getUsedUnits(){
+ const units=[...new Set(DB.ingredients.map(x=>String(x.unit||"").trim()).filter(Boolean))];
+ if(!units.some(x=>norm(x)===norm("unité"))) units.push("unité");
+ return units;
+}
+function getUsedIngredients(){
+ const unique=new Map();
+ DB.ingredients.forEach(x=>{
+  const display=String(x.ingredient||"").trim();
+  if(!display)return;
+  const key=norm(display);
+  if(!unique.has(key)) unique.set(key,display);
+ });
+ return [...unique.values()].sort((a,b)=>a.localeCompare(b,"fr"));
+}
+function addIngredientRow(){
+ const root=document.getElementById("ingredientRows"); if(!root)return;
+ const units=getUsedUnits(), ings=getUsedIngredients();
+ const n=root.children.length, ingId="ingredientSuggestions-"+n, unitId="unitSuggestions-"+n;
+ const unitOptions=units.map(u=>`<option value="${esc(u)}">`).join("");
+ const ingOptions=ings.map(i=>`<option value="${esc(i)}">`).join("");
+ root.insertAdjacentHTML("beforeend",`<div class="ingredient-edit"><input class="ing-name" list="${ingId}" placeholder="Ingrédient"><datalist id="${ingId}">${ingOptions}</datalist><input class="ing-qty" type="number" step="any" placeholder="Qté"><select class="ing-unit"><option value="">Unité</option>${units.map(u=>`<option value="${esc(u)}">${esc(u)}</option>`).join("")}</select><select class="ing-cat"><option>Fruits et légumes</option><option>Epicerie</option><option>Produits frais</option></select><button type="button" onclick="this.parentElement.remove()">✕</button></div>`);
+}
+function saveNewRecipe(){
+ const name=document.getElementById("newRecipeName").value.trim();
+ if(!name){showToast("Donne un nom à la recette");return;}
+ if(DB.meals.some(m=>norm(m)===norm(name))){showToast("Cette recette existe déjà");return;}
+ const rows=[...document.querySelectorAll("#ingredientRows .ingredient-edit")];
+ const ingredients=rows.map(r=>({ingredient:r.querySelector('.ing-name').value.trim(),quantity:Number(r.querySelector('.ing-qty').value)||0,unit:r.querySelector('.ing-unit').value.trim()||"unité",category:r.querySelector('.ing-cat').value})).filter(x=>x.ingredient);
+ const custom=getCustomRecipes(); custom.push({name,ingredients}); saveCustomRecipes(custom);
+ DB.meals.push(name); ingredients.forEach(x=>DB.ingredients.push({...x,plat:name}));
+ closeModal(); renderMeals(); showToast("Recette ajoutée");
+}
+function showMealDetail(m){
+ const items=DB.ingredients.filter(x=>norm(x.plat)===norm(m));document.getElementById("modalTitle").textContent=m;document.getElementById("mealSearch").style.display="none";document.getElementById("mealChoices").innerHTML=`<div class="card"><h2>Ingrédients</h2>${items.length?items.map(x=>`<div class="course-row"><div class="course-main"><b>${esc(x.ingredient)}</b><div class="muted">${fmtQty(x.quantity)} ${esc(x.unit)} · ${esc(x.category)}</div></div></div>`).join(""):`<div class="muted">Aucun ingrédient trouvé pour ce repas.</div>`}</div><button class="primary" onclick="closeMealDetail()">Fermer</button>`;document.getElementById("modal").classList.add("show");
+}
+function closeMealDetail(){document.getElementById("modal").classList.remove("show");document.getElementById("mealSearch").style.display="block"}
+function renderArchives(){
+  const root=document.getElementById("archives"), archives=getArchives();
+  root.innerHTML=`<div class="section-title">Historique des menus</div>`+
+    (archives.length ? archives.map((a,i)=>`<div class="card archive-item"><div><b>${esc(a.label)}</b><div class="muted">Menu conservé automatiquement</div></div><button class="secondary" onclick="viewArchive(${i})">Voir</button></div>`).join("") : `<div class="empty-state">Aucune semaine archivée pour le moment.<br><br>Les anciennes semaines seront conservées automatiquement.</div>`);
+}
+function viewArchive(i){
+  const a=getArchives()[i]; if(!a)return;
+  const items=[];
+  for(let d=0;d<7;d++){
+    const lunch=a.menu[`${d}-midi`]||"", lunch2=a.menu[`${d}-midi-2`]||"", dinner=a.menu[`${d}-soir`]||"", dinner2=a.menu[`${d}-soir-2`]||"";
+    if(lunch||lunch2||dinner||dinner2)items.push(`<div class="course-row"><div class="course-main"><b>${DB.days[d]}</b><div class="muted">☀️ ${esc(lunch||"—")}${lunch2?` + ${esc(lunch2)}`:""}<br>🌙 ${esc(dinner||"—")}${dinner2?` + ${esc(dinner2)}`:""}</div></div></div>`);
+  }
+  document.getElementById("modalTitle").textContent=a.label;document.getElementById("mealSearch").style.display="none";document.getElementById("mealChoices").innerHTML=`<div class="card"><h2>Menu archivé</h2>${items.length?items.join(""):"<div class=\"muted\">Cette semaine était vide.</div>"}</div><button class="primary" onclick="closeMealDetail()">Fermer</button>`;document.getElementById("modal").classList.add("show");
+}
+
+/* ================= CHLOVAN TO-DO V6 — LOCAL / AUTONOME ================= */
+let TODO_DATA={tasks:[],lists:{}};
+let TODO_EDIT_ID=null;
+const TODO_KEY='chlovan-todo-v6';
+const TODO_OLD_KEY='chlovan-todo-cache-v5';
+const TODO_LISTS={
+  people:['Stévan','Chloé','Nous'],
+  categories:['Administratif','Achats','Chlovan','Ménage','Travaux','Autre'],
+  priorities:['Haute','Normale','Basse'],
+  times:['Rapide','Moyen','Long','Très long'],
+  recurrences:['Aucune','Tous les jours','Toutes les semaines','Toutes les 2 semaines','Tous les mois','Tous les 6 mois','Tous les ans','Tous les lundis','Tous les mardis','Tous les mercredis','Tous les jeudis','Tous les vendredis','Tous les samedis','Tous les dimanches'],
+  when:['Peu importe','Aujourd’hui','Demain','En retard','Cette semaine','Semaine prochaine','Sans date']
+};
+function todoEsc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function todoAttr(s){return todoEsc(s)}
+function todoFmt(s){if(!s)return '';const p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0]}
+function todoOptions(arr,any=false){return (any?['Peu importe',...arr]:arr).map(x=>`<option>${todoEsc(x)}</option>`).join('')}
+function todoToday(){const d=new Date();d.setHours(0,0,0,0);return d}
+function todoDateKey(d){const x=new Date(d);return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`}
+function todoParseDate(v){return v?new Date(v+'T00:00:00'):null}
+function todoIsLate(t){if(t.status==='Terminé'||t.archived)return false;const k=t.due||t.date;if(!k)return false;return todoParseDate(k)<todoToday()}
+function todoSort(a,b){const la=todoIsLate(a),lb=todoIsLate(b);if(la!==lb)return la?-1:1;const ad=a.date||'9999-12-31',bd=b.date||'9999-12-31';if(ad!==bd)return ad.localeCompare(bd);const ah=a.hour||'99:99',bh=b.hour||'99:99';if(ah!==bh)return ah.localeCompare(bh);const pr={Haute:1,Normale:2,Basse:3};return (pr[a.prio]||9)-(pr[b.prio]||9)}
+function todoIsPeople(t,f){if(f==='Peu importe')return true;if(f==='Stévan')return t==='Stévan'||t==='Nous';if(f==='Chloé')return t==='Chloé'||t==='Nous';return t===f}
+function todoRecalc(){TODO_DATA.tasks.forEach(t=>t.late=todoIsLate(t));TODO_DATA.tasks.sort(todoSort);todoSave()}
+function todoSave(){localStorage.setItem(TODO_KEY,JSON.stringify(TODO_DATA))}
+function todoNextId(){let max=0;TODO_DATA.tasks.forEach(t=>{const m=String(t.id||'').match(/^TD-(\d+)$/);if(m)max=Math.max(max,+m[1])});return 'TD-'+String(max+1).padStart(4,'0')}
+function todoNewSeriesId(){return 'SER-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7)}
+function todoNormalizeTask(t){return {...t,late:todoIsLate(t),archived:!!t.archived,status:t.status||'À faire',rec:t.rec||'Aucune'} }
+function todoLoad(){
+  let raw=localStorage.getItem(TODO_KEY);
+  if(!raw){
+    const old=localStorage.getItem(TODO_OLD_KEY);
+    if(old){try{const d=JSON.parse(old);TODO_DATA={tasks:(d.tasks||[]).map(todoNormalizeTask),lists:TODO_LISTS};todoSave();}catch(e){TODO_DATA={tasks:[],lists:TODO_LISTS}}}
+    else TODO_DATA={tasks:[],lists:TODO_LISTS};
+  }else{try{const d=JSON.parse(raw);TODO_DATA={tasks:(d.tasks||[]).map(todoNormalizeTask),lists:TODO_LISTS}}catch(e){TODO_DATA={tasks:[],lists:TODO_LISTS}}
+  }
+  todoRecalc();
+}
+function todoLocalFilter(filters){
+  const now=todoToday(),tomorrow=new Date(now);tomorrow.setDate(tomorrow.getDate()+1);const day=now.getDay()||7;const mon=new Date(now);mon.setDate(now.getDate()-day+1);const sun=new Date(mon);sun.setDate(mon.getDate()+6);const nextMon=new Date(sun);nextMon.setDate(sun.getDate()+1);const nextSun=new Date(nextMon);nextSun.setDate(nextMon.getDate()+6);const key=d=>d?todoParseDate(d).getTime():null;
+  return TODO_DATA.tasks.filter(t=>!t.archived&&t.status!=='Terminé').filter(t=>{if(filters.time!=='Peu importe'&&t.time!==filters.time)return false;if(!todoIsPeople(t.person,filters.person))return false;if(filters.cat!=='Peu importe'&&t.cat!==filters.cat)return false;if(filters.when==='Sans date')return !t.date&&!t.due;if(filters.when==='Aujourd’hui')return (t.date&&key(t.date)===now.getTime())||todoIsLate(t);if(filters.when==='Demain')return t.date&&key(t.date)===tomorrow.getTime();if(filters.when==='Cette semaine')return (t.date&&key(t.date)>=mon.getTime()&&key(t.date)<=sun.getTime())||todoIsLate(t);if(filters.when==='Semaine prochaine')return t.date&&key(t.date)>=nextMon.getTime()&&key(t.date)<=nextSun.getTime();if(filters.when==='En retard')return todoIsLate(t);return true}).sort(todoSort)
+}
+function todoTaskCard(t){
+  const late=todoIsLate(t), running=t.status==='En cours'; let meta=[];
+  if(t.cat)meta.push(`<span class="todo-pill">${todoEsc(t.cat)}</span>`);if(t.person)meta.push(`<span class="todo-pill">${todoEsc(t.person)}</span>`);if(t.prio)meta.push(`<span class="todo-pill">${todoEsc(t.prio)}</span>`);if(t.time)meta.push(`<span class="todo-pill">${todoEsc(t.time)}</span>`);if(t.date)meta.push(`<span class="todo-pill">${todoFmt(t.date)}${t.hour?' à '+todoEsc(t.hour):''}</span>`);if(t.due)meta.push(`<span class="todo-pill">Échéance ${todoFmt(t.due)}</span>`);if(late)meta.push(`<span class="todo-late">EN RETARD</span>`);if(running)meta.push(`<span class="todo-running-label">EN COURS</span>`);
+  return `<article class="todo-card ${late?'late':''} ${running?'running':''}"><div><h3>${todoEsc(t.task)}</h3><div class="todo-meta">${meta.join('')}</div></div><div class="todo-actions">${running?`<button class="primary" onclick="todoResume('${t.id}')">REPRENDRE</button><button onclick="todoComplete('${t.id}')">J'AI FINI</button><button onclick="todoStop('${t.id}')">JE NE M'EN OCCUPE PLUS</button>`:`<button class="primary" onclick="todoStart('${t.id}')">JE COMMENCE</button>`}<button onclick="todoEdit('${t.id}')">MODIFIER</button><button class="danger" onclick="todoDelete('${t.id}')">SUPPRIMER</button></div></article>`
+}
+function todoBanner(){
+  const running=TODO_DATA.tasks.filter(t=>!t.archived&&t.status==='En cours');const late=TODO_DATA.tasks.filter(t=>!t.archived&&todoIsLate(t)).length;
+  if(!running.length)return '';
+  return `<div class="todo-running-banner"><div class="todo-running-summary"><span class="todo-running-dot"></span><div><b>${running.length} tâche${running.length>1?'s':''} en cours</b><span>${late} en retard</span></div></div><div class="todo-running-list">${running.map(t=>`<div class="todo-running-item"><span>${todoEsc(t.task)}</span><div><button class="mini primary" onclick="todoResume('${t.id}')">REPRENDRE</button><button class="mini" onclick="todoComplete('${t.id}')">J’AI FINI</button></div></div>`).join('')}</div></div>`
+}
+function todoRender(){
+  const active=TODO_DATA.tasks.filter(t=>!t.archived&&t.status!=='Terminé'),running=active.filter(t=>t.status==='En cours'),late=active.filter(todoIsLate).length;const root=document.getElementById('todo');
+  root.innerHTML=`<div class="todo-wrap">${todoBanner()}<div class="todo-stats"><div class="todo-stat"><b>${active.length}</b><span>tâches à faire</span></div><div class="todo-stat"><b>${running.length}</b><span>en cours</span></div><div class="todo-stat"><b>${late}</b><span>en retard</span></div></div><div class="section-title">Nouvelle tâche</div><div class="todo-composer"><div class="todo-grid"><div class="todo-field todo-full"><label>Tâche</label><input id="newTask" placeholder="Que faut-il faire ?"></div><div class="todo-field"><label>Catégorie</label><select id="newCat"></select></div><div class="todo-field"><label>Personne</label><select id="newPerson"></select></div><div class="todo-field"><label>Priorité</label><select id="newPrio"></select></div><div class="todo-field"><label>Temps</label><select id="newTime"></select></div><div class="todo-field"><label>Date</label><input id="newDate" type="date"></div><div class="todo-field"><label>Heure</label><input id="newHour" type="time"></div><div class="todo-field"><label>Échéance</label><input id="newDue" type="date"></div><div class="todo-field"><label>Récurrence</label><select id="newRec"></select></div></div><div class="todo-actions" style="margin-top:10px;justify-content:flex-start"><button class="primary" onclick="todoCreate()">CRÉER</button></div></div><div class="section-title todo-section-head"><span>Liste des tâches</span><div><button class="todo-refresh" onclick="todoExport()">Sauvegarder</button><button class="todo-refresh" onclick="document.getElementById('todoImport').click()">Restaurer</button><input id="todoImport" type="file" accept="application/json" hidden onchange="todoImport(event)"></div></div><div id="todoList">${active.length?active.map(todoTaskCard).join(''):'<div class="todo-empty">Aucune tâche active.</div>'}</div></div>`;todoFillForm();
+}
+function todoFillForm(){const l=TODO_DATA.lists;const fill=(id,a,any)=>{const e=document.getElementById(id);if(e)e.innerHTML=todoOptions(a||[],any)};fill('newCat',l.categories);fill('newPerson',l.people);fill('newPrio',l.priorities);fill('newTime',l.times);fill('newRec',l.recurrences);if(document.getElementById('newPrio'))document.getElementById('newPrio').value='Normale';if(document.getElementById('newRec'))document.getElementById('newRec').value='Aucune'}
+function todoRenderDo(){const root=document.getElementById('do');const l=TODO_DATA.lists;root.innerHTML=`<div class="todo-wrap">${todoBanner()}<div class="section-title">QUE PUIS-JE FAIRE ?</div><div class="todo-filters"><div class="todo-field"><label>Temps disponible</label><select id="fTime">${todoOptions(l.times,true)}</select></div><div class="todo-field"><label>Personne</label><select id="fPerson">${todoOptions(l.people,true)}</select></div><div class="todo-field"><label>Catégorie</label><select id="fCat">${todoOptions(l.categories,true)}</select></div><div class="todo-field"><label>Quand</label><select id="fWhen">${todoOptions(l.when,true)}</select></div></div><div id="doCount" class="muted" style="margin:6px 3px 8px"></div><div id="doList"></div></div>`;['fTime','fPerson','fCat','fWhen'].forEach(id=>document.getElementById(id).onchange=todoApplyFilter);todoApplyFilter()}
+function todoApplyFilter(){const f={time:document.getElementById('fTime').value,person:document.getElementById('fPerson').value,cat:document.getElementById('fCat').value,when:document.getElementById('fWhen').value};const arr=todoLocalFilter(f);document.getElementById('doCount').textContent=arr.length+' tâche'+(arr.length>1?'s':'');document.getElementById('doList').innerHTML=arr.length?arr.map(todoTaskCard).join(''):'<div class="todo-empty">Aucune tâche ne correspond à ces filtres.</div>'}
+function todoPersistRender(){todoRecalc();todoRender();if(state.screen==='do')todoRenderDo()}
+function todoPatch(task){const i=TODO_DATA.tasks.findIndex(x=>x.id===task.id);if(i>=0)TODO_DATA.tasks[i]=task;else TODO_DATA.tasks.push(task);todoPersistRender()}
+function todoStart(id){const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;t.status='En cours';t.archived=false;todoPersistRender()}
+function todoResume(id){todoStart(id)}
+function todoStop(id){const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;t.status=todoIsLate(t)?'À faire':'À faire';todoPersistRender()}
+function todoAddNextOccurrence(t){if(!t.rec||t.rec==='Aucune'||!t.date)return;const d=todoParseDate(t.date);let next=new Date(d);const addDays=n=>next.setDate(next.getDate()+n);const addMonths=n=>{const day=next.getDate();next.setDate(1);next.setMonth(next.getMonth()+n);const last=new Date(next.getFullYear(),next.getMonth()+1,0).getDate();next.setDate(Math.min(day,last))};if(t.rec==='Tous les jours')addDays(1);else if(t.rec==='Toutes les semaines')addDays(7);else if(t.rec==='Toutes les 2 semaines')addDays(14);else if(t.rec==='Tous les mois')addMonths(1);else if(t.rec==='Tous les 6 mois')addMonths(6);else if(t.rec==='Tous les ans')addMonths(12);else{const days={'Tous les dimanches':0,'Tous les lundis':1,'Tous les mardis':2,'Tous les mercredis':3,'Tous les jeudis':4,'Tous les vendredis':5,'Tous les samedis':6};if(days[t.rec]!==undefined){let diff=(days[t.rec]-next.getDay()+7)%7;if(diff===0)diff=7;addDays(diff)}else return}const nt={...t,id:todoNextId(),date:todoDateKey(next),status:'À faire',archived:false,done:'',next:'',seriesId:t.seriesId||t.id,created:new Date().toISOString()};TODO_DATA.tasks.push(nt);t.next=nt.date}
+function todoComplete(id){const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;t.status='Terminé';t.archived=true;t.done=new Date().toISOString();todoAddNextOccurrence(t);todoPersistRender();showToast(t.rec&&t.rec!=='Aucune'?'Terminé · prochaine occurrence créée':'Tâche terminée')}
+function todoCreate(){const task=document.getElementById('newTask')?.value.trim();if(!task)return alert('La tâche est obligatoire.');const t={id:todoNextId(),task,cat:document.getElementById('newCat').value,person:document.getElementById('newPerson').value,prio:document.getElementById('newPrio').value||'Normale',time:document.getElementById('newTime').value,date:document.getElementById('newDate').value,hour:document.getElementById('newHour').value,due:document.getElementById('newDue').value,rec:document.getElementById('newRec').value||'Aucune',status:'À faire',archived:false,created:new Date().toISOString(),done:'',next:'',seriesId:null};if(!t.cat||!t.person)return alert('Catégorie et personne sont obligatoires.');if(t.rec!=='Aucune')t.seriesId=todoNewSeriesId();TODO_DATA.tasks.push(t);todoPersistRender();showToast('Tâche créée')}
+function todoEdit(id){const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;TODO_EDIT_ID=id;const l=TODO_DATA.lists;document.getElementById('todoEditForm').innerHTML=`<div class="todo-grid"><div class="todo-field todo-full"><label>Tâche</label><input id="eTask" value="${todoAttr(t.task)}"></div><div class="todo-field"><label>Catégorie</label><select id="eCat">${todoOptions(l.categories)}</select></div><div class="todo-field"><label>Personne</label><select id="ePerson">${todoOptions(l.people)}</select></div><div class="todo-field"><label>Priorité</label><select id="ePrio">${todoOptions(l.priorities)}</select></div><div class="todo-field"><label>Temps</label><select id="eTime">${todoOptions(l.times)}</select></div><div class="todo-field"><label>Date</label><input id="eDate" type="date" value="${t.date||''}"></div><div class="todo-field"><label>Heure</label><input id="eHour" type="time" value="${t.hour||''}"></div><div class="todo-field"><label>Échéance</label><input id="eDue" type="date" value="${t.due||''}"></div><div class="todo-field"><label>Récurrence</label><select id="eRec">${todoOptions(l.recurrences)}</select></div></div>`;['eCat','ePerson','ePrio','eTime','eRec'].forEach((x,i)=>document.getElementById(x).value=[t.cat,t.person,t.prio,t.time,t.rec][i]);document.getElementById('todoEditModal').classList.add('show')}
+function todoCloseEdit(){TODO_EDIT_ID=null;document.getElementById('todoEditModal').classList.remove('show')}
+function todoSaveEdit(){const t=TODO_DATA.tasks.find(x=>x.id===TODO_EDIT_ID);if(!t)return;const data={task:document.getElementById('eTask').value.trim(),cat:document.getElementById('eCat').value,person:document.getElementById('ePerson').value,prio:document.getElementById('ePrio').value,time:document.getElementById('eTime').value,date:document.getElementById('eDate').value,hour:document.getElementById('eHour').value,due:document.getElementById('eDue').value,rec:document.getElementById('eRec').value};if(!data.task)return alert('La tâche est obligatoire.');Object.assign(t,data);if(t.rec==='Aucune')t.seriesId=null;else if(!t.seriesId)t.seriesId=todoNewSeriesId();todoCloseEdit();todoPersistRender();showToast('Tâche modifiée')}
+function todoDelete(id){const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;if(t.rec&&t.rec!=='Aucune'){const all=confirm('Cette tâche est récurrente. OK = supprimer toute la série. Annuler = supprimer seulement cette occurrence.');if(all){if(!confirm('Confirmer la suppression de toute la série ?'))return;TODO_DATA.tasks=TODO_DATA.tasks.filter(x=>x.seriesId!==t.seriesId);showToast('Série supprimée')}else if(confirm('Supprimer seulement cette occurrence ?')){TODO_DATA.tasks=TODO_DATA.tasks.filter(x=>x.id!==id);showToast('Occurrence supprimée')}}else if(confirm('Supprimer cette tâche ?')){TODO_DATA.tasks=TODO_DATA.tasks.filter(x=>x.id!==id);showToast('Tâche supprimée')}todoPersistRender()}
+function todoExport(){const blob=new Blob([JSON.stringify({version:6,exportedAt:new Date().toISOString(),tasks:TODO_DATA.tasks},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='CHLOVAN_TODO_sauvegarde.json';a.click();URL.revokeObjectURL(a.href)}
+function todoImport(ev){const f=ev.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.tasks))throw new Error('Fichier invalide');TODO_DATA={tasks:d.tasks.map(todoNormalizeTask),lists:TODO_LISTS};todoPersistRender();showToast('Sauvegarde restaurée')}catch(e){alert('Impossible de restaurer cette sauvegarde.')}};r.readAsText(f);ev.target.value=''}
+function todoBoot(){todoLoad();todoRender()}
+
+todoBoot();
+init();
+</script>
+<style>
+.mobile-ingredient-suggest{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:100;max-height:220px;overflow:auto;display:none}
+.mobile-ingredient-suggest button{display:block;width:100%;text-align:left;border:0;background:#fff;padding:12px 14px;font-size:16px;border-bottom:1px solid var(--line)}
+.mobile-ingredient-suggest button:last-child{border-bottom:0}
+.ingredient-edit{position:relative}
+</style>
+<script>
+(function(){
+  function setupIngredientSuggest(input){
+    if(!input || input.dataset.suggestReady) return;
+    input.dataset.suggestReady='1';
+    const box=document.createElement('div'); box.className='mobile-ingredient-suggest';
+    input.parentElement.appendChild(box);
+    function names(){
+      return (typeof getUsedIngredients==='function'?getUsedIngredients():[]);
+    }
+    function render(){
+      const q=norm(input.value||'');
+      if(!q){box.style.display='none'; box.innerHTML=''; return;}
+      const list=names().filter(n=>norm(n).startsWith(q)).slice(0,12);
+      if(!list.length){box.style.display='none'; box.innerHTML=''; return;}
+      box.innerHTML=list.map(n=>`<button type="button">${esc(n)}</button>`).join('');
+      box.querySelectorAll('button').forEach((b,i)=>b.addEventListener('click',()=>{
+        input.value=list[i]; box.style.display='none';
+        input.dispatchEvent(new Event('input',{bubbles:true}));
+      }));
+      box.style.display='block';
+    }
+    input.addEventListener('input',render);
+    input.addEventListener('focus',render);
+    input.addEventListener('blur',()=>setTimeout(()=>box.style.display='none',180));
+  }
+  function scan(){document.querySelectorAll('#ingredientRows .ing-name').forEach(setupIngredientSuggest)}
+  const old=window.addIngredientRow;
+  if(typeof old==='function'){
+    window.addIngredientRow=function(){old.apply(this,arguments); setTimeout(scan,0)};
+  }
+  new MutationObserver(scan).observe(document.body,{childList:true,subtree:true});
+  scan();
+})();
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}</script>
+</body>
+</html>
