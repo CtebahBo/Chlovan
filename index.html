@@ -96,8 +96,59 @@ main{padding:8px 14px}.screen{display:none}.screen.active{display:block}
 .todo-running-banner{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin:0 0 12px;box-shadow:var(--shadow)}.todo-running-summary{display:flex;align-items:center;gap:9px}.todo-running-summary b{display:block;font-size:13px}.todo-running-summary span:not(.todo-running-dot){display:block;font-size:11px;color:var(--muted);margin-top:2px}.todo-running-dot{width:9px;height:9px;border-radius:50%;background:#d9a72c;box-shadow:0 0 0 4px #fff4cc;flex:0 0 auto}.todo-running-list{display:grid;gap:6px;margin-top:8px}.todo-running-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:7px;border-top:1px solid var(--line);font-size:12px}.todo-running-item>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.todo-running-item>div{display:flex;gap:5px;flex-shrink:0}.mini{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 8px;font-size:10px;font-weight:700}.mini.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.todo-running-label{color:#9a7410;font-weight:800}.todo-section-head{display:flex;align-items:center;justify-content:space-between}.todo-section-head>div{display:flex;gap:5px}.todo-section-head .todo-refresh{font-size:10px;padding:6px 8px}
 @media(max-width:600px){.todo-running-banner{padding:10px;margin-bottom:10px}.todo-running-item{align-items:flex-start}.todo-running-item>div{gap:4px}.mini{min-height:34px;padding:5px 7px}.todo-card{padding:12px;margin:8px 0}.todo-actions{gap:5px}.todo-actions button{min-height:38px;padding:7px 9px}.todo-section-head{align-items:flex-start;gap:8px}.todo-section-head>div{flex-shrink:0}}
 
-/* V7 refinements */
+/* V8 refinements — pop 70 doux + ergonomie */
+:root{
+  --pop-orange:#e59a58;
+  --pop-pink:#d98aa2;
+  --pop-red:#c96d68;
+  --pop-yellow:#e5c56a;
+  --pop-blue:#76a9c6;
+  --pop-green:#78a58b;
+}
+.course-stock-input{
+  width:112px;
+  min-height:42px;
+  font-size:16px;
+  text-align:center;
+  border-radius:10px;
+  padding:7px 10px;
+}
+.course-stock-line{font-size:12px}
+.course-buy{color:#5f8f75}
+.course-buy.enough{color:#5f8f75}
+.nav button:nth-child(1).active .icon{background:var(--pop-orange)}
+.nav button:nth-child(2).active .icon{background:var(--pop-pink)}
+.nav button:nth-child(3).active .icon{background:var(--pop-blue)}
+.nav button:nth-child(4).active .icon{background:var(--pop-yellow);color:#5c5030}
+.nav button:nth-child(5).active .icon{background:var(--pop-green)}
+.nav button:nth-child(1).active{color:#b76f32}
+.nav button:nth-child(2).active{color:#b56b83}
+.nav button:nth-child(3).active{color:#5d8ba8}
+.nav button:nth-child(4).active{color:#a58a35}
+.nav button:nth-child(5).active{color:#5f876f}
+.todo-stat:nth-child(1){border-top:4px solid var(--pop-orange)}
+.todo-stat:nth-child(2){border-top:4px solid var(--pop-green)}
+.todo-stat:nth-child(3){border-top:4px solid var(--pop-red)}
+.todo-running-dot{background:var(--pop-yellow);box-shadow:0 0 0 4px #fff7dc}
+.todo-card.running{border-left-color:var(--pop-green)}
+.todo-card.late{border-left-color:var(--pop-red)}
+.todo-late{color:var(--pop-red)}
+.todo-actions .primary{background:var(--pop-green);border-color:var(--pop-green)}
+.todo-running-label{color:#668a73}
+.todo-filter-chip:nth-child(1){border-color:#e8c9ab}
+.todo-filter-chip:nth-child(2){border-color:#e6c3cd}
+.todo-filter-chip:nth-child(3){border-color:#bdd3df}
+.todo-filter-chip:nth-child(4){border-color:#e9dca9}
+@media(max-width:600px){
+  .course-stock-input{width:112px;min-height:44px;font-size:16px}
+}
+
 .todo-card{cursor:pointer;grid-template-columns:1fr auto;align-items:center}.todo-card:active{transform:scale(.995)}.todo-chevron{font-size:28px;color:#b2aea6;padding-left:4px}.todo-pill{background:#f0efec;color:#66635d}.todo-running-label{color:inherit}.todo-running-banner .todo-running-item>div{display:flex}.todo-filter-chip{display:flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:5px 7px;min-width:150px;flex:0 0 auto}.todo-filter-chip span{font-size:10px;color:var(--muted);font-weight:700}.todo-filter-chip select{border:0;background:transparent;min-width:0;font-size:12px;padding:3px;outline:none}.course-stock-help{margin-bottom:10px}.course-stock-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:7px;font-size:11px;color:var(--muted)}.course-stock-line label{display:flex;align-items:center;gap:5px}.course-stock-input{width:72px;min-height:32px;border:1px solid var(--line);border-radius:8px;padding:5px 7px;background:#fff}.course-buy{color:var(--accent);font-weight:800}.course-buy.enough{color:#6f7a72}.meal-library-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.meal-library-name{border:0;background:transparent;text-align:left;padding:0;flex:1;min-width:0;color:inherit}.meal-library-row .edit{flex-shrink:0}.todo-action-modal-buttons button{min-height:42px}
+.todo-new-head{display:flex;align-items:center;justify-content:space-between;margin:10px 3px 8px}
+.todo-new-button{width:42px;height:42px;border:0;border-radius:12px;background:var(--pop-orange);color:#fff;font-size:26px;line-height:1;font-weight:500;box-shadow:var(--shadow)}
+.todo-composer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.todo-composer-head .close{min-width:40px;min-height:40px}
+.todo-composer{margin-bottom:12px}
 @media(max-width:600px){.todo-card{grid-template-columns:1fr auto}.todo-filters{display:flex;overflow-x:auto;gap:7px;padding:2px 1px 8px;margin:0 -2px 8px;scroll-snap-type:x proximity}.todo-filter-chip{min-width:142px;height:42px;scroll-snap-align:start}.todo-filter-chip select{font-size:11px}.course-stock-line{gap:6px}.course-stock-input{width:65px}.meal-library-row{min-height:46px}.todo-action-modal-buttons{justify-content:flex-start!important}.todo-action-modal-buttons button{flex:1 1 auto}}
 </style>
 </head>
@@ -345,15 +396,31 @@ function calcCourses(){
 function fmtQty(q){return Number.isInteger(q)?String(q):String(Math.round(q*100)/100)}
 function courseStockId(x){return norm(x.category)+"|"+norm(x.ingredient)+"|"+norm(x.unit)}
 function setStock(id,value){
-  const n=Math.max(0,Number(value)||0);
+  const raw=String(value??'').replace(',','.');
+  const n=Math.max(0,Number(raw)||0);
   if(n>0)state.stock[id]=n; else delete state.stock[id];
-  save();renderCourses();
+  localStorage.setItem(STORAGE_STOCK,JSON.stringify(state.stock));
+  renderCourses();
+}
+function setStockLive(id,input){
+  const raw=String(input?.value??'').replace(',','.');
+  const n=Math.max(0,Number(raw)||0);
+  if(n>0)state.stock[id]=n; else delete state.stock[id];
+  localStorage.setItem(STORAGE_STOCK,JSON.stringify(state.stock));
+  const row=input.closest('.course-row');
+  const buy=row?.querySelector('.course-buy');
+  const need=Number(input.dataset.need)||0;
+  if(buy){
+    const rest=Math.max(0,need-n);
+    buy.textContent=rest===0?'✓ Suffisant à la maison':'À acheter : '+fmtQty(rest)+' '+(input.dataset.unit||'');
+    buy.classList.toggle('enough',rest===0);
+  }
 }
 function renderCourses(){
  const root=document.getElementById("courses"),rows=calcCourses();
  if(!rows.length){root.innerHTML=`<div class="empty-state">Aucun ingrédient à acheter.<br><br>Ajoute des repas dans le menu.</div>`;return}
  const groups=[];for(const x of rows){let g=groups.find(y=>y.category===x.category);if(!g){g={category:x.category,items:[]};groups.push(g)}g.items.push(x)}
- root.innerHTML=`<div class="section-title">Liste calculée automatiquement</div><div class="card course-stock-help"><b>${rows.length} ingrédients</b> nécessaires selon le menu actuel.<div class="muted" style="margin-top:4px">Indique ce que tu as déjà à la maison : CHLOVAN déduira automatiquement cette quantité de ta liste.</div></div>`+groups.map(g=>`<div class="course-cat"><h3>${esc(g.category)}</h3><div class="card" style="padding:0 15px">${g.items.map(x=>{const id=courseStockId(x),checked=!!state.checked[id],stock=Number(state.stock[id])||0,buy=Math.max(0,(Number(x.quantity)||0)-stock);return `<div class="course-row ${checked?'checked':''}"><input type="checkbox" ${checked?'checked':''} onchange="toggleCheck(${JSON.stringify(id)})"><div class="course-main"><div><span class="qty">${fmtQty(x.quantity)} ${esc(x.unit)}</span> — ${esc(x.ingredient)}</div><div class="course-stock-line"><label>Déjà à la maison <input class="course-stock-input" type="number" min="0" step="any" value="${stock||''}" placeholder="0" onchange="setStock(${JSON.stringify(id)},this.value)" onclick="event.stopPropagation()"> ${esc(x.unit)}</label><b class="course-buy ${buy===0?'enough':''}">${buy===0?'✓ Suffisant à la maison':'À acheter : '+fmtQty(buy)+' '+esc(x.unit)}</b></div><div class="source">${[...x.meals].map(esc).join(" · ")}</div></div></div>`}).join("")}</div></div>`).join("");
+ root.innerHTML=`<div class="section-title">Liste calculée automatiquement</div><div class="card course-stock-help"><b>${rows.length} ingrédients</b> nécessaires selon le menu actuel.<div class="muted" style="margin-top:4px">Indique ce que tu as déjà à la maison : CHLOVAN déduira automatiquement cette quantité de ta liste.</div></div>`+groups.map(g=>`<div class="course-cat"><h3>${esc(g.category)}</h3><div class="card" style="padding:0 15px">${g.items.map(x=>{const id=courseStockId(x),checked=!!state.checked[id],stock=Number(state.stock[id])||0,buy=Math.max(0,(Number(x.quantity)||0)-stock);return `<div class="course-row ${checked?'checked':''}"><input type="checkbox" ${checked?'checked':''} onchange="toggleCheck(${JSON.stringify(id)})"><div class="course-main"><div><span class="qty">${fmtQty(x.quantity)} ${esc(x.unit)}</span> — ${esc(x.ingredient)}</div><div class="course-stock-line"><label>Déjà à la maison <input class="course-stock-input" type="number" min="0" step="any" value="${stock||''}" placeholder="0" data-need="${Number(x.quantity)||0}" data-unit="${esc(x.unit)}" oninput="setStockLive(${JSON.stringify(id)},this)" onchange="setStock(${JSON.stringify(id)},this.value)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"> ${esc(x.unit)}</label><b class="course-buy ${buy===0?'enough':''}">${buy===0?'✓ Suffisant à la maison':'À acheter : '+fmtQty(buy)+' '+esc(x.unit)}</b></div><div class="source">${[...x.meals].map(esc).join(" · ")}</div></div></div>`}).join("")}</div></div>`).join("");
 }
 function toggleCheck(id){state.checked[id]=!state.checked[id];save();renderCourses();}
 function renderMeals(){
@@ -500,9 +567,9 @@ function todoTaskCard(t){
   if(t.time)meta.push(`<span class="todo-pill">${todoEsc(t.time)}</span>`);
   if(t.date)meta.push(`<span class="todo-pill">${todoFmt(t.date)}${t.hour?' à '+todoEsc(t.hour):''}</span>`);
   if(t.due)meta.push(`<span class="todo-pill">Échéance ${todoFmt(t.due)}</span>`);
-  if(late)meta.push(`<span class="todo-pill">EN RETARD</span>`);
-  if(running)meta.push(`<span class="todo-pill">EN COURS</span>`);
-  return `<article class="todo-card ${late?'late':''} ${running?'running':''}" onclick="todoOpenActions('${t.id}')"><div><h3>${todoEsc(t.task)}</h3><div class="todo-meta">${meta.join('')}</div></div><div class="todo-chevron">›</div></article>`
+  if(late)meta.push(`<span class="todo-late">EN RETARD</span>`);
+  if(running)meta.push(`<span class="todo-running-label">EN COURS</span>`);
+  return `<article class="todo-card ${late?'late':''} ${running?'running':''}" onclick="todoOpenActions('${t.id}')"><div><h3>${todoEsc(t.task)}</h3><div class="todo-meta">${meta.join('')}</div></div><div class="todo-chevron">›</div></article>`;
 }
 function todoOpenActions(id){
  const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;
@@ -521,7 +588,18 @@ function todoBanner(){
 }
 function todoRender(){
   const active=TODO_DATA.tasks.filter(t=>!t.archived&&t.status!=='Terminé'),running=active.filter(t=>t.status==='En cours'),late=active.filter(todoIsLate).length;const root=document.getElementById('todo');
-  root.innerHTML=`<div class="todo-wrap">${todoBanner()}<div class="todo-stats"><div class="todo-stat"><b>${active.length}</b><span>tâches à faire</span></div><div class="todo-stat"><b>${running.length}</b><span>en cours</span></div><div class="todo-stat"><b>${late}</b><span>en retard</span></div></div><div class="section-title">Nouvelle tâche</div><div class="todo-composer"><div class="todo-grid"><div class="todo-field todo-full"><label>Tâche</label><input id="newTask" placeholder="Que faut-il faire ?"></div><div class="todo-field"><label>Catégorie</label><select id="newCat"></select></div><div class="todo-field"><label>Personne</label><select id="newPerson"></select></div><div class="todo-field"><label>Priorité</label><select id="newPrio"></select></div><div class="todo-field"><label>Temps</label><select id="newTime"></select></div><div class="todo-field"><label>Date</label><input id="newDate" type="date"></div><div class="todo-field"><label>Heure</label><input id="newHour" type="time"></div><div class="todo-field"><label>Échéance</label><input id="newDue" type="date"></div><div class="todo-field"><label>Récurrence</label><select id="newRec"></select></div></div><div class="todo-actions" style="margin-top:10px;justify-content:flex-start"><button class="primary" onclick="todoCreate()">CRÉER</button></div></div><div class="section-title todo-section-head"><span>Liste des tâches</span><div><button class="todo-refresh" onclick="todoExport()">Sauvegarder</button><button class="todo-refresh" onclick="document.getElementById('todoImport').click()">Restaurer</button><input id="todoImport" type="file" accept="application/json" hidden onchange="todoImport(event)"></div></div><div id="todoList">${active.length?active.map(todoTaskCard).join(''):'<div class="todo-empty">Aucune tâche active.</div>'}</div></div>`;todoFillForm();
+  root.innerHTML=`<div class="todo-wrap">${todoBanner()}<div class="todo-stats"><div class="todo-stat"><b>${active.length}</b><span>tâches à faire</span></div><div class="todo-stat"><b>${running.length}</b><span>en cours</span></div><div class="todo-stat"><b>${late}</b><span>en retard</span></div></div><div class="todo-new-head"><div class="section-title" style="margin-bottom:0">Mes tâches</div><button class="todo-new-button" onclick="todoOpenComposer()" aria-label="Créer une nouvelle tâche">+</button></div><div id="todoComposer" class="todo-composer" style="display:none"><div class="todo-composer-head"><b>Nouvelle tâche</b><button class="close" onclick="todoCloseComposer()">✕</button></div><div class="todo-grid"><div class="todo-field todo-full"><label>Tâche</label><input id="newTask" placeholder="Que faut-il faire ?"></div><div class="todo-field"><label>Catégorie</label><select id="newCat"></select></div><div class="todo-field"><label>Personne</label><select id="newPerson"></select></div><div class="todo-field"><label>Priorité</label><select id="newPrio"></select></div><div class="todo-field"><label>Temps</label><select id="newTime"></select></div><div class="todo-field"><label>Date</label><input id="newDate" type="date"></div><div class="todo-field"><label>Heure</label><input id="newHour" type="time"></div><div class="todo-field"><label>Échéance</label><input id="newDue" type="date"></div><div class="todo-field"><label>Récurrence</label><select id="newRec"></select></div></div><div class="todo-actions" style="margin-top:10px;justify-content:flex-start"><button class="primary" onclick="todoCreate()">CRÉER</button></div></div><div class="section-title todo-section-head"><span>Liste des tâches</span><div><button class="todo-refresh" onclick="todoExport()">Sauvegarder</button><button class="todo-refresh" onclick="document.getElementById('todoImport').click()">Restaurer</button><input id="todoImport" type="file" accept="application/json" hidden onchange="todoImport(event)"></div></div><div id="todoList">${active.length?active.map(todoTaskCard).join(''):'<div class="todo-empty">Aucune tâche active.</div>'}</div></div>`;todoFillForm();
+}
+function todoOpenComposer(){
+  const box=document.getElementById('todoComposer');
+  if(!box)return;
+  box.style.display='block';
+  todoFillForm();
+  setTimeout(()=>document.getElementById('newTask')?.focus(),50);
+}
+function todoCloseComposer(){
+  const box=document.getElementById('todoComposer');
+  if(box)box.style.display='none';
 }
 function todoFillForm(){const l=TODO_DATA.lists;const fill=(id,a,any)=>{const e=document.getElementById(id);if(e)e.innerHTML=todoOptions(a||[],any)};fill('newCat',l.categories);fill('newPerson',l.people);fill('newPrio',l.priorities);fill('newTime',l.times);fill('newRec',l.recurrences);if(document.getElementById('newPrio'))document.getElementById('newPrio').value='Normale';if(document.getElementById('newRec'))document.getElementById('newRec').value='Aucune'}
 function todoRenderDo(){const root=document.getElementById('do');const l=TODO_DATA.lists;root.innerHTML=`<div class="todo-wrap">${todoBanner()}<div class="section-title">QUE PUIS-JE FAIRE ?</div><div class="todo-filters"><div class="todo-filter-chip"><span>Temps</span><select id="fTime">${todoOptions(l.times,true)}</select></div><div class="todo-filter-chip"><span>Personne</span><select id="fPerson">${todoOptions(l.people,true)}</select></div><div class="todo-filter-chip"><span>Catégorie</span><select id="fCat">${todoOptions(l.categories,true)}</select></div><div class="todo-filter-chip"><span>Quand</span><select id="fWhen">${todoOptions(l.when,true)}</select></div></div><div id="doCount" class="muted" style="margin:6px 3px 8px"></div><div id="doList"></div></div>`;['fTime','fPerson','fCat','fWhen'].forEach(id=>document.getElementById(id).onchange=todoApplyFilter);todoApplyFilter()}
@@ -533,12 +611,12 @@ function todoResume(id){todoStart(id)}
 function todoStop(id){const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;t.status=todoIsLate(t)?'À faire':'À faire';todoPersistRender()}
 function todoAddNextOccurrence(t){if(!t.rec||t.rec==='Aucune'||!t.date)return;const d=todoParseDate(t.date);let next=new Date(d);const addDays=n=>next.setDate(next.getDate()+n);const addMonths=n=>{const day=next.getDate();next.setDate(1);next.setMonth(next.getMonth()+n);const last=new Date(next.getFullYear(),next.getMonth()+1,0).getDate();next.setDate(Math.min(day,last))};if(t.rec==='Tous les jours')addDays(1);else if(t.rec==='Toutes les semaines')addDays(7);else if(t.rec==='Toutes les 2 semaines')addDays(14);else if(t.rec==='Tous les mois')addMonths(1);else if(t.rec==='Tous les 6 mois')addMonths(6);else if(t.rec==='Tous les ans')addMonths(12);else{const days={'Tous les dimanches':0,'Tous les lundis':1,'Tous les mardis':2,'Tous les mercredis':3,'Tous les jeudis':4,'Tous les vendredis':5,'Tous les samedis':6};if(days[t.rec]!==undefined){let diff=(days[t.rec]-next.getDay()+7)%7;if(diff===0)diff=7;addDays(diff)}else return}const nt={...t,id:todoNextId(),date:todoDateKey(next),status:'À faire',archived:false,done:'',next:'',seriesId:t.seriesId||t.id,created:new Date().toISOString()};TODO_DATA.tasks.push(nt);t.next=nt.date}
 function todoComplete(id){const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;t.status='Terminé';t.archived=true;t.done=new Date().toISOString();todoAddNextOccurrence(t);todoPersistRender();showToast(t.rec&&t.rec!=='Aucune'?'Terminé · prochaine occurrence créée':'Tâche terminée')}
-function todoCreate(){const task=document.getElementById('newTask')?.value.trim();if(!task)return alert('La tâche est obligatoire.');const t={id:todoNextId(),task,cat:document.getElementById('newCat').value,person:document.getElementById('newPerson').value,prio:document.getElementById('newPrio').value||'Normale',time:document.getElementById('newTime').value,date:document.getElementById('newDate').value,hour:document.getElementById('newHour').value,due:document.getElementById('newDue').value,rec:document.getElementById('newRec').value||'Aucune',status:'À faire',archived:false,created:new Date().toISOString(),done:'',next:'',seriesId:null};if(!t.cat||!t.person)return alert('Catégorie et personne sont obligatoires.');if(t.rec!=='Aucune')t.seriesId=todoNewSeriesId();TODO_DATA.tasks.push(t);todoPersistRender();showToast('Tâche créée')}
+function todoCreate(){const task=document.getElementById('newTask')?.value.trim();if(!task)return alert('La tâche est obligatoire.');const t={id:todoNextId(),task,cat:document.getElementById('newCat').value,person:document.getElementById('newPerson').value,prio:document.getElementById('newPrio').value||'Normale',time:document.getElementById('newTime').value,date:document.getElementById('newDate').value,hour:document.getElementById('newHour').value,due:document.getElementById('newDue').value,rec:document.getElementById('newRec').value||'Aucune',status:'À faire',archived:false,created:new Date().toISOString(),done:'',next:'',seriesId:null};if(!t.cat||!t.person)return alert('Catégorie et personne sont obligatoires.');if(t.rec!=='Aucune')t.seriesId=todoNewSeriesId();TODO_DATA.tasks.push(t);todoPersistRender();todoCloseComposer();showToast('Tâche créée')}
 function todoEdit(id){const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;TODO_EDIT_ID=id;const l=TODO_DATA.lists;document.getElementById('todoEditForm').innerHTML=`<div class="todo-grid"><div class="todo-field todo-full"><label>Tâche</label><input id="eTask" value="${todoAttr(t.task)}"></div><div class="todo-field"><label>Catégorie</label><select id="eCat">${todoOptions(l.categories)}</select></div><div class="todo-field"><label>Personne</label><select id="ePerson">${todoOptions(l.people)}</select></div><div class="todo-field"><label>Priorité</label><select id="ePrio">${todoOptions(l.priorities)}</select></div><div class="todo-field"><label>Temps</label><select id="eTime">${todoOptions(l.times)}</select></div><div class="todo-field"><label>Date</label><input id="eDate" type="date" value="${t.date||''}"></div><div class="todo-field"><label>Heure</label><input id="eHour" type="time" value="${t.hour||''}"></div><div class="todo-field"><label>Échéance</label><input id="eDue" type="date" value="${t.due||''}"></div><div class="todo-field"><label>Récurrence</label><select id="eRec">${todoOptions(l.recurrences)}</select></div></div>`;['eCat','ePerson','ePrio','eTime','eRec'].forEach((x,i)=>document.getElementById(x).value=[t.cat,t.person,t.prio,t.time,t.rec][i]);document.getElementById('todoEditModal').classList.add('show')}
 function todoCloseEdit(){TODO_EDIT_ID=null;document.getElementById('todoEditModal').classList.remove('show')}
 function todoSaveEdit(){const t=TODO_DATA.tasks.find(x=>x.id===TODO_EDIT_ID);if(!t)return;const data={task:document.getElementById('eTask').value.trim(),cat:document.getElementById('eCat').value,person:document.getElementById('ePerson').value,prio:document.getElementById('ePrio').value,time:document.getElementById('eTime').value,date:document.getElementById('eDate').value,hour:document.getElementById('eHour').value,due:document.getElementById('eDue').value,rec:document.getElementById('eRec').value};if(!data.task)return alert('La tâche est obligatoire.');Object.assign(t,data);if(t.rec==='Aucune')t.seriesId=null;else if(!t.seriesId)t.seriesId=todoNewSeriesId();todoCloseEdit();todoPersistRender();showToast('Tâche modifiée')}
 function todoDelete(id){const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;if(t.rec&&t.rec!=='Aucune'){const all=confirm('Cette tâche est récurrente. OK = supprimer toute la série. Annuler = supprimer seulement cette occurrence.');if(all){if(!confirm('Confirmer la suppression de toute la série ?'))return;TODO_DATA.tasks=TODO_DATA.tasks.filter(x=>x.seriesId!==t.seriesId);showToast('Série supprimée')}else if(confirm('Supprimer seulement cette occurrence ?')){TODO_DATA.tasks=TODO_DATA.tasks.filter(x=>x.id!==id);showToast('Occurrence supprimée')}}else if(confirm('Supprimer cette tâche ?')){TODO_DATA.tasks=TODO_DATA.tasks.filter(x=>x.id!==id);showToast('Tâche supprimée')}todoPersistRender()}
-function todoExport(){const blob=new Blob([JSON.stringify({version:6,exportedAt:new Date().toISOString(),tasks:TODO_DATA.tasks},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='CHLOVAN_TODO_sauvegarde.json';a.click();URL.revokeObjectURL(a.href)}
+function todoExport(){const blob=new Blob([JSON.stringify({version:8,exportedAt:new Date().toISOString(),tasks:TODO_DATA.tasks},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='CHLOVAN_TODO_sauvegarde.json';a.click();URL.revokeObjectURL(a.href)}
 function todoImport(ev){const f=ev.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.tasks))throw new Error('Fichier invalide');TODO_DATA={tasks:d.tasks.map(todoNormalizeTask),lists:TODO_LISTS};todoPersistRender();showToast('Sauvegarde restaurée')}catch(e){alert('Impossible de restaurer cette sauvegarde.')}};r.readAsText(f);ev.target.value=''}
 function todoBoot(){todoLoad();todoRender()}
 
