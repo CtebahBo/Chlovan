@@ -172,6 +172,21 @@ header[data-screen="archives"] #title{color:var(--accent)}
 @media(max-width:600px){.course-sticky-head{top:58px;padding:7px 0 8px}.course-sticky-title{font-size:12px}.course-sticky-count{font-size:12px;padding:7px 8px}.course-add-button{width:38px;height:38px;flex-basis:38px}.course-row .course-stock-input{width:145px;min-width:145px;min-height:48px;font-size:17px}.course-buy{font-size:11px}.extra-course-grid{grid-template-columns:1fr 90px}}
 
 </style>
+
+<style id="v14-course-persistence-ui">
+/* V14 : couleurs fixes liées à l'onglet actif + titres centrés */
+header #title{width:100%;text-align:center !important;margin-left:0;margin-right:0}
+html[data-active-screen="planning"] .nav button:nth-child(1).active{color:#b76f32}
+html[data-active-screen="meals"] .nav button:nth-child(2).active{color:#b56b83}
+html[data-active-screen="courses"] .nav button:nth-child(3).active{color:#5d8ba8}
+html[data-active-screen="do"] .nav button:nth-child(4).active{color:#8f7829}
+html[data-active-screen="todo"] .nav button:nth-child(5).active{color:#5f876f}
+html[data-active-screen="planning"] .nav button:nth-child(1).active .icon{background:var(--pop-orange)}
+html[data-active-screen="meals"] .nav button:nth-child(2).active .icon{background:var(--pop-pink)}
+html[data-active-screen="courses"] .nav button:nth-child(3).active .icon{background:var(--pop-blue)}
+html[data-active-screen="do"] .nav button:nth-child(4).active .icon{background:var(--pop-yellow);color:#5c5030}
+html[data-active-screen="todo"] .nav button:nth-child(5).active .icon{background:var(--pop-green)}
+</style>
 </head>
 <body>
 <div class="app">
@@ -295,24 +310,43 @@ function readObject(key){
     return value && typeof value === "object" && !Array.isArray(value) ? value : {};
   }catch(e){ return {}; }
 }
+const STORAGE_COURSE_STATE="chlovan-course-state-v2";
 const state = {
   week: 0,
   screen: "planning",
   menu: calendar.weeks[calendar.currentKey],
-  checked: readObject(STORAGE_CHECKED),
-  stock: readObject(STORAGE_STOCK),
+  checked: {},
+  stock: {},
   editingKey: null,
   weekKeys: [calendar.currentKey,calendar.nextKey]
 };
 function loadCoursePersistence(){
-  state.checked=readObject(STORAGE_CHECKED);
-  state.stock=readObject(STORAGE_STOCK);
+  let combined=null;
+  try{
+    const raw=localStorage.getItem(STORAGE_COURSE_STATE);
+    if(raw){
+      const parsed=JSON.parse(raw);
+      if(parsed && typeof parsed === "object") combined=parsed;
+    }
+  }catch(e){}
+  const legacyChecked=readObject(STORAGE_CHECKED);
+  const legacyStock=readObject(STORAGE_STOCK);
+  state.checked=(combined && combined.checked && typeof combined.checked==='object') ? combined.checked : legacyChecked;
+  state.stock=(combined && combined.stock && typeof combined.stock==='object') ? combined.stock : legacyStock;
 }
 function saveCoursePersistence(){
   try{
+    const payload={version:2,checked:state.checked||{},stock:state.stock||{},savedAt:Date.now()};
+    const json=JSON.stringify(payload);
+    localStorage.setItem(STORAGE_COURSE_STATE,json);
+    /* Keep the old keys too so existing installations remain compatible. */
     localStorage.setItem(STORAGE_CHECKED,JSON.stringify(state.checked||{}));
     localStorage.setItem(STORAGE_STOCK,JSON.stringify(state.stock||{}));
-  }catch(e){}
+    return true;
+  }catch(e){
+    console.error('CHLOVAN course persistence error',e);
+    return false;
+  }
 }
 function save(){
   const weeks=getStoredWeeks();
@@ -381,9 +415,10 @@ function setWeek(i){
   render();
 }
 function setScreen(s){
+  /* Persist COURSE before changing the DOM, then reload the persisted snapshot. */
   saveCoursePersistence();
-  loadCoursePersistence();
   state.screen=s;
+  loadCoursePersistence();
   document.querySelector("header")?.setAttribute("data-screen",s);
   document.documentElement.setAttribute("data-active-screen",s);
   document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
@@ -491,11 +526,11 @@ function applyCourseStock(id,stock,inputEl){
   }
   row.classList.toggle('course-sufficient',rest===0);
 }
-function setStock(id,value){
+function setStock(id,value,inputEl){
   const n=parseQty(value);
   if(n>0)state.stock[id]=n; else delete state.stock[id];
   saveCoursePersistence();
-  applyCourseStock(id,n);
+  applyCourseStock(id,n,inputEl);
 }
 function setStockLive(id,input){
   const n=parseQty(input?.value);
@@ -854,25 +889,26 @@ html[data-active-screen] .weekbtn.active{background:var(--tab);border-color:var(
 })();
 </script>
 <script>
-/* PWA : purge une ancienne version mise en cache, sans toucher aux donnees localStorage. */
+/* V14 : pendant la phase de test, aucun service worker n'est enregistré.
+   On désactive une éventuelle ancienne version afin qu'elle ne serve pas un ancien HTML.
+   Les données localStorage (menu, stock, cases, recettes, tâches) ne sont pas supprimées. */
 if("serviceWorker" in navigator){
   window.addEventListener("load",async()=>{
     try{
-      const marker="chlovan-cache-reset-v13";
-      if(!localStorage.getItem(marker)){
-        const regs=await navigator.serviceWorker.getRegistrations();
-        let hadOld=false;
-        for(const r of regs){hadOld=true; await r.unregister();}
-        if(window.caches){
-          const keys=await caches.keys();
-          await Promise.all(keys.map(k=>caches.delete(k)));
-        }
-        localStorage.setItem(marker,"1");
-        if(hadOld){location.reload();return;}
+      const marker="chlovan-sw-purged-v14";
+      const already=sessionStorage.getItem(marker)==="1";
+      const regs=await navigator.serviceWorker.getRegistrations();
+      const had=regs.length>0;
+      await Promise.all(regs.map(r=>r.unregister()));
+      if(window.caches){
+        const keys=await caches.keys();
+        await Promise.all(keys.map(k=>caches.delete(k)));
       }
-      /* L'installation du nouveau SW est volontairement apres le reset. */
-      await navigator.serviceWorker.register("sw.js?v=13");
-    }catch(e){}
+      if(had && !already){
+        sessionStorage.setItem(marker,"1");
+        location.reload();
+      }
+    }catch(e){ console.warn("CHLOVAN SW cleanup",e); }
   });
 }
 </script>
