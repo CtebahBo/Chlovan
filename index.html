@@ -13,7 +13,7 @@
 :root{--bg:#f7f4ee;--card:#fff;--text:#24231f;--muted:#7a776f;--line:#e7e1d8;--accent:#2f5d50;--accent2:#e9f0ed;--danger:#a24747;--shadow:0 8px 24px rgba(40,35,28,.07)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
 button,input,select{font:inherit}button{cursor:pointer}.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:88px}
-header{padding:22px 18px 10px;position:sticky;top:0;background:rgba(247,244,238,.94);backdrop-filter:blur(12px);z-index:5}
+header{padding:22px 18px 10px;position:sticky; text-align:center;top:0;background:rgba(247,244,238,.94);backdrop-filter:blur(12px);z-index:5}
 .brand{font-size:12px;letter-spacing:.16em;font-weight:800;color:var(--accent)}h1{font-size:28px;margin:4px 0 0}
 .weekbar{display:flex;gap:8px;overflow:auto;padding:12px 18px 8px}.weekbtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;white-space:nowrap}.weekbtn.active{background:var(--accent);color:white;border-color:var(--accent)}
 main{padding:8px 14px}.screen{display:none}.screen.active{display:block}
@@ -27,13 +27,30 @@ main{padding:8px 14px}.screen{display:none}.screen.active{display:block}
 .actions{display:flex;gap:8px}.secondary{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 12px}.primary{border:0;background:var(--accent);color:#fff;border-radius:10px;padding:9px 12px;font-weight:700}
 .toast{position:fixed;left:50%;bottom:82px;transform:translateX(-50%);background:#222;color:white;padding:9px 13px;border-radius:999px;font-size:12px;display:none;z-index:30}.toast.show{display:block}
 .empty-state{text-align:center;padding:30px 15px;color:var(--muted)}.archive-item{display:flex;justify-content:space-between;align-items:center;gap:10px}.archive-item b{font-size:14px}.archive-item button{flex-shrink:0}
+
+/* Couleur de chaque onglet */
+#planning.active{--tab:#e59a58;--tab-dark:#b76f32;--tab-soft:#faecdf;--tab-text:#fff}
+#meals.active{--tab:#d98aa2;--tab-dark:#b56b83;--tab-soft:#f8e8ee;--tab-text:#fff}
+#courses.active{--tab:#76a9c6;--tab-dark:#5d8ba8;--tab-soft:#e7f1f6;--tab-text:#fff}
+#do.active{--tab:#e5c56a;--tab-dark:#a58a35;--tab-soft:#f8f1d9;--tab-text:#5c5030}
+#todo.active{--tab:#78a58b;--tab-dark:#5f876f;--tab-soft:#e8f0eb;--tab-text:#fff}
+.screen.active .primary{background:var(--tab);border-color:var(--tab);color:var(--tab-text)}
+.screen.active .edit{background:var(--tab-soft);color:var(--tab-dark)}
+.screen.active .secondary{border-color:color-mix(in srgb,var(--tab) 45%,#e7e1d8);color:var(--tab-dark)}
+.screen.active .todo-refresh{border-color:color-mix(in srgb,var(--tab) 45%,#e7e1d8);color:var(--tab-dark)}
+.screen.active .add-meal{border-color:color-mix(in srgb,var(--tab) 45%,#e7e1d8);color:var(--tab-dark)}
+.screen.active .meal-option:hover{border-color:var(--tab)}
+.screen.active .todo-pill{background:var(--tab-soft);color:var(--tab-dark)}
+.screen.active .todo-card.running{border-left-color:var(--tab)}
+.screen.active .todo-running-dot{background:var(--tab);box-shadow:0 0 0 4px var(--tab-soft)}
+
 @media(min-width:700px){main{padding:8px 18px}.bottom{position:fixed}}
 
 @media (max-width: 600px){
   :root{--shadow:0 4px 16px rgba(40,35,28,.06)}
   body{font-size:16px;-webkit-text-size-adjust:100%;overflow-x:hidden}
   .app{width:100%;max-width:none;padding-bottom:86px}
-  header{padding:14px 14px 6px}
+  header{padding:14px 14px 6px; text-align:center}
   .brand{font-size:10px}
   h1{font-size:24px;margin-top:2px}
   .weekbar{padding:9px 12px 7px;gap:7px}
@@ -143,13 +160,13 @@ main{padding:8px 14px}.screen{display:none}.screen.active{display:block}
   .course-stock-input{width:112px;min-height:44px;font-size:16px}
 }
 
-.todo-card{cursor:pointer;grid-template-columns:1fr auto;align-items:center}.todo-card:active{transform:scale(.995)}.todo-chevron{font-size:28px;color:#b2aea6;padding-left:4px}.todo-pill{background:#f0efec;color:#66635d}.todo-running-label{color:inherit}.todo-running-banner .todo-running-item>div{display:flex}.todo-filter-chip{display:flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:5px 7px;min-width:150px;flex:0 0 auto}.todo-filter-chip span{font-size:10px;color:var(--muted);font-weight:700}.todo-filter-chip select{border:0;background:transparent;min-width:0;font-size:12px;padding:3px;outline:none}.course-stock-help{margin-bottom:10px}.course-stock-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:7px;font-size:11px;color:var(--muted)}.course-stock-line label{display:flex;align-items:center;gap:5px}.course-stock-input{width:72px;min-height:32px;border:1px solid var(--line);border-radius:8px;padding:5px 7px;background:#fff}.course-buy{color:var(--accent);font-weight:800}.course-buy.enough{color:#6f7a72}.meal-library-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.meal-library-name{border:0;background:transparent;text-align:left;padding:0;flex:1;min-width:0;color:inherit}.meal-library-row .edit{flex-shrink:0}.todo-action-modal-buttons button{min-height:42px}
+.todo-card{cursor:pointer;grid-template-columns:1fr auto;align-items:center}.todo-card:active{transform:scale(.995)}.todo-chevron{font-size:28px;color:#b2aea6;padding-left:4px}.todo-pill{background:#f0efec;color:#66635d}.todo-running-label{color:inherit}.todo-running-banner .todo-running-item>div{display:flex}.todo-filter-chip{display:flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:5px 7px;min-width:150px;flex:0 0 auto}.todo-filter-chip span{font-size:10px;color:var(--muted);font-weight:700}.todo-filter-chip select{border:0;background:transparent;min-width:0;font-size:12px;padding:3px;outline:none}.course-stock-help{margin-bottom:10px}.course-stock-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--muted)}.course-stock-line label{display:flex;align-items:center;gap:5px}.course-stock-input{width:140px;min-height:44px;border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:#fff;font-size:16px;text-align:center;color:var(--text);font-weight:700}.course-buy{color:var(--accent);font-weight:800}.course-buy.enough{color:#6f7a72}.meal-library-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.meal-library-name{border:0;background:transparent;text-align:left;padding:0;flex:1;min-width:0;color:inherit}.meal-library-row .edit{flex-shrink:0}.todo-action-modal-buttons button{min-height:42px}
 .todo-new-head{display:flex;align-items:center;justify-content:space-between;margin:10px 3px 8px}
 .todo-new-button{width:42px;height:42px;border:0;border-radius:12px;background:var(--pop-orange);color:#fff;font-size:26px;line-height:1;font-weight:500;box-shadow:var(--shadow)}
 .todo-composer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .todo-composer-head .close{min-width:40px;min-height:40px}
 .todo-composer{margin-bottom:12px}
-@media(max-width:600px){.todo-card{grid-template-columns:1fr auto}.todo-filters{display:flex;overflow-x:auto;gap:7px;padding:2px 1px 8px;margin:0 -2px 8px;scroll-snap-type:x proximity}.todo-filter-chip{min-width:142px;height:42px;scroll-snap-align:start}.todo-filter-chip select{font-size:11px}.course-stock-line{gap:6px}.course-stock-input{width:65px}.meal-library-row{min-height:46px}.todo-action-modal-buttons{justify-content:flex-start!important}.todo-action-modal-buttons button{flex:1 1 auto}}
+@media(max-width:600px){.todo-card{grid-template-columns:1fr auto}.todo-filters{display:flex;overflow-x:auto;gap:7px;padding:2px 1px 8px;margin:0 -2px 8px;scroll-snap-type:x proximity}.todo-filter-chip{min-width:142px;height:42px;scroll-snap-align:start}.todo-filter-chip select{font-size:11px}.course-stock-line{gap:6px}.course-stock-input{width:140px;min-height:44px;font-size:16px}.meal-library-row{min-height:46px}.todo-action-modal-buttons{justify-content:flex-start!important}.todo-action-modal-buttons button{flex:1 1 auto}}
 </style>
 </head>
 <body>
@@ -184,7 +201,6 @@ main{padding:8px 14px}.screen{display:none}.screen.active{display:block}
 </div></div>
 <div id="modal" class="modal"><div class="sheet">
 <div class="sheettop"><div><div class="brand">CHOISIR UN REPAS</div><h2 id="modalTitle" style="margin:4px 0 0">—</h2></div><button class="close" onclick="closeModal()">✕</button></div>
-<p class="muted">Les recettes sont intégrées directement dans l’application.</p>
 <input id="mealSearch" class="search" placeholder="Rechercher un repas…" oninput="renderMealChoices()">
 <div id="mealChoices" class="meal-list"></div>
 </div></div>
@@ -400,33 +416,42 @@ function setStock(id,value){
   const n=Math.max(0,Number(raw)||0);
   if(n>0)state.stock[id]=n; else delete state.stock[id];
   localStorage.setItem(STORAGE_STOCK,JSON.stringify(state.stock));
-  renderCourses();
+  updateCourseStockDisplay(id,n);
+}
+function updateCourseStockDisplay(id,stock){
+  const row=document.querySelector('.course-row[data-stock-id="'+CSS.escape(id)+'"]');
+  if(!row)return;
+  const input=row.querySelector('.course-stock-input');
+  const buyEl=row.querySelector('.course-buy');
+  const qtyEl=row.querySelector('.course-qty-buy');
+  const need=Number(input?.dataset.need)||0;
+  const unit=input?.dataset.unit||'';
+  const rest=Math.max(0,need-(Number(stock)||0));
+  if(qtyEl)qtyEl.textContent=fmtQty(rest)+' '+unit;
+  if(buyEl){
+    buyEl.textContent=rest===0?'✓ Suffisant à la maison':'À acheter : '+fmtQty(rest)+' '+unit;
+    buyEl.classList.toggle('enough',rest===0);
+  }
+  row.classList.toggle('course-sufficient',rest===0);
 }
 function setStockLive(id,input){
   const raw=String(input?.value??'').replace(',','.');
   const n=Math.max(0,Number(raw)||0);
   if(n>0)state.stock[id]=n; else delete state.stock[id];
   localStorage.setItem(STORAGE_STOCK,JSON.stringify(state.stock));
-  const row=input.closest('.course-row');
-  const buy=row?.querySelector('.course-buy');
-  const need=Number(input.dataset.need)||0;
-  if(buy){
-    const rest=Math.max(0,need-n);
-    buy.textContent=rest===0?'✓ Suffisant à la maison':'À acheter : '+fmtQty(rest)+' '+(input.dataset.unit||'');
-    buy.classList.toggle('enough',rest===0);
-  }
+  updateCourseStockDisplay(id,n);
 }
 function renderCourses(){
  const root=document.getElementById("courses"),rows=calcCourses();
  if(!rows.length){root.innerHTML=`<div class="empty-state">Aucun ingrédient à acheter.<br><br>Ajoute des repas dans le menu.</div>`;return}
  const groups=[];for(const x of rows){let g=groups.find(y=>y.category===x.category);if(!g){g={category:x.category,items:[]};groups.push(g)}g.items.push(x)}
- root.innerHTML=`<div class="section-title">Liste calculée automatiquement</div><div class="card course-stock-help"><b>${rows.length} ingrédients</b> nécessaires selon le menu actuel.<div class="muted" style="margin-top:4px">Indique ce que tu as déjà à la maison : CHLOVAN déduira automatiquement cette quantité de ta liste.</div></div>`+groups.map(g=>`<div class="course-cat"><h3>${esc(g.category)}</h3><div class="card" style="padding:0 15px">${g.items.map(x=>{const id=courseStockId(x),checked=!!state.checked[id],stock=Number(state.stock[id])||0,buy=Math.max(0,(Number(x.quantity)||0)-stock);return `<div class="course-row ${checked?'checked':''}"><input type="checkbox" ${checked?'checked':''} onchange="toggleCheck(${JSON.stringify(id)})"><div class="course-main"><div><span class="qty">${fmtQty(x.quantity)} ${esc(x.unit)}</span> — ${esc(x.ingredient)}</div><div class="course-stock-line"><label>Déjà à la maison <input class="course-stock-input" type="number" min="0" step="any" value="${stock||''}" placeholder="0" data-need="${Number(x.quantity)||0}" data-unit="${esc(x.unit)}" oninput="setStockLive(${JSON.stringify(id)},this)" onchange="setStock(${JSON.stringify(id)},this.value)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"> ${esc(x.unit)}</label><b class="course-buy ${buy===0?'enough':''}">${buy===0?'✓ Suffisant à la maison':'À acheter : '+fmtQty(buy)+' '+esc(x.unit)}</b></div><div class="source">${[...x.meals].map(esc).join(" · ")}</div></div></div>`}).join("")}</div></div>`).join("");
+ root.innerHTML=`<div class="section-title">Ma liste</div><div class="card course-count"><b>${rows.length} ingrédients</b></div>`+groups.map(g=>`<div class="course-cat"><h3>${esc(g.category)}</h3><div class="card" style="padding:0 15px">${g.items.map(x=>{const id=courseStockId(x),checked=!!state.checked[id],stock=Number(state.stock[id])||0,buy=Math.max(0,(Number(x.quantity)||0)-stock);return `<div class="course-row ${checked?'checked':''} ${buy===0?'course-sufficient':''}" data-stock-id="${esc(id)}"><input type="checkbox" ${checked?'checked':''} onchange="toggleCheck(${JSON.stringify(id)})"><div class="course-main"><div><span class="course-qty-buy qty">${fmtQty(buy)} ${esc(x.unit)}</span> — ${esc(x.ingredient)}</div><div class="course-stock-line"><label>Déjà à la maison <input class="course-stock-input" type="number" min="0" step="any" value="${stock||''}" placeholder="0" data-need="${Number(x.quantity)||0}" data-unit="${esc(x.unit)}" oninput="setStockLive(${JSON.stringify(id)},this)" onchange="setStock(${JSON.stringify(id)},this.value)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"> ${esc(x.unit)}</label><b class="course-buy ${buy===0?'enough':''}">${buy===0?'✓ Suffisant à la maison':'À acheter : '+fmtQty(buy)+' '+esc(x.unit)}</b></div><div class="source">${[...x.meals].map(esc).join(" · ")}</div></div></div>`}).join("")}</div></div>`).join("");
 }
 function toggleCheck(id){state.checked[id]=!state.checked[id];save();renderCourses();}
 function renderMeals(){
  const root=document.getElementById("meals");
  const selected=getSelectedWeekMeals();
- root.innerHTML=`<div class="section-title">Bibliothèque des recettes</div><div class="card recipe-add"><div><h2 style="margin:0 0 4px">${DB.meals.length} recettes</h2><div class="muted">Toutes tes recettes sont disponibles ici.</div></div><button class="primary" onclick="openAddRecipe()">+</button></div><input class="search" placeholder="Rechercher une recette…" oninput="filterMeals(this.value)"><div id="mealLibrary" class="meal-list"></div>`;
+ root.innerHTML=`<div class="section-title">Bibliothèque des recettes</div><div class="card recipe-add"><div><h2 style="margin:0 0 4px">${DB.meals.length} recettes</h2></div><button class="primary" onclick="openAddRecipe()">+</button></div><input class="search" placeholder="Rechercher une recette…" oninput="filterMeals(this.value)"><div id="mealLibrary" class="meal-list"></div>`;
  filterMeals("");
 }
 function getSelectedWeekMeals(){
@@ -505,7 +530,7 @@ function closeMealDetail(){document.getElementById("modal").classList.remove("sh
 function renderArchives(){
   const root=document.getElementById("archives"), archives=getArchives();
   root.innerHTML=`<div class="section-title">Historique des menus</div>`+
-    (archives.length ? archives.map((a,i)=>`<div class="card archive-item"><div><b>${esc(a.label)}</b><div class="muted">Menu conservé automatiquement</div></div><button class="secondary" onclick="viewArchive(${i})">Voir</button></div>`).join("") : `<div class="empty-state">Aucune semaine archivée pour le moment.<br><br>Les anciennes semaines seront conservées automatiquement.</div>`);
+    (archives.length ? archives.map((a,i)=>`<div class="card archive-item"><div><b>${esc(a.label)}</b></div><button class="secondary" onclick="viewArchive(${i})">Voir</button></div>`).join("") : `<div class="empty-state">Aucune semaine archivée pour le moment.<br><br>Les anciennes semaines seront conservées automatiquement.</div>`);
 }
 function viewArchive(i){
   const a=getArchives()[i]; if(!a)return;
@@ -616,7 +641,7 @@ function todoEdit(id){const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;TO
 function todoCloseEdit(){TODO_EDIT_ID=null;document.getElementById('todoEditModal').classList.remove('show')}
 function todoSaveEdit(){const t=TODO_DATA.tasks.find(x=>x.id===TODO_EDIT_ID);if(!t)return;const data={task:document.getElementById('eTask').value.trim(),cat:document.getElementById('eCat').value,person:document.getElementById('ePerson').value,prio:document.getElementById('ePrio').value,time:document.getElementById('eTime').value,date:document.getElementById('eDate').value,hour:document.getElementById('eHour').value,due:document.getElementById('eDue').value,rec:document.getElementById('eRec').value};if(!data.task)return alert('La tâche est obligatoire.');Object.assign(t,data);if(t.rec==='Aucune')t.seriesId=null;else if(!t.seriesId)t.seriesId=todoNewSeriesId();todoCloseEdit();todoPersistRender();showToast('Tâche modifiée')}
 function todoDelete(id){const t=TODO_DATA.tasks.find(x=>x.id===id);if(!t)return;if(t.rec&&t.rec!=='Aucune'){const all=confirm('Cette tâche est récurrente. OK = supprimer toute la série. Annuler = supprimer seulement cette occurrence.');if(all){if(!confirm('Confirmer la suppression de toute la série ?'))return;TODO_DATA.tasks=TODO_DATA.tasks.filter(x=>x.seriesId!==t.seriesId);showToast('Série supprimée')}else if(confirm('Supprimer seulement cette occurrence ?')){TODO_DATA.tasks=TODO_DATA.tasks.filter(x=>x.id!==id);showToast('Occurrence supprimée')}}else if(confirm('Supprimer cette tâche ?')){TODO_DATA.tasks=TODO_DATA.tasks.filter(x=>x.id!==id);showToast('Tâche supprimée')}todoPersistRender()}
-function todoExport(){const blob=new Blob([JSON.stringify({version:8,exportedAt:new Date().toISOString(),tasks:TODO_DATA.tasks},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='CHLOVAN_TODO_sauvegarde.json';a.click();URL.revokeObjectURL(a.href)}
+function todoExport(){const blob=new Blob([JSON.stringify({version:9,exportedAt:new Date().toISOString(),tasks:TODO_DATA.tasks},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='CHLOVAN_TODO_sauvegarde.json';a.click();URL.revokeObjectURL(a.href)}
 function todoImport(ev){const f=ev.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.tasks))throw new Error('Fichier invalide');TODO_DATA={tasks:d.tasks.map(todoNormalizeTask),lists:TODO_LISTS};todoPersistRender();showToast('Sauvegarde restaurée')}catch(e){alert('Impossible de restaurer cette sauvegarde.')}};r.readAsText(f);ev.target.value=''}
 function todoBoot(){todoLoad();todoRender()}
 
@@ -624,43 +649,62 @@ todoBoot();
 init();
 </script>
 <style>
-.mobile-ingredient-suggest{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:100;max-height:220px;overflow:auto;display:none}
-.mobile-ingredient-suggest button{display:block;width:100%;text-align:left;border:0;background:#fff;padding:12px 14px;font-size:16px;border-bottom:1px solid var(--line)}
+.mobile-ingredient-suggest{position:fixed;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.16);z-index:9999;max-height:220px;overflow:auto;display:none;width:min(420px,calc(100vw - 24px));overscroll-behavior:contain}
+.mobile-ingredient-suggest button{display:block;width:100%;text-align:left;border:0;background:#fff;padding:12px 14px;font-size:16px;border-bottom:1px solid var(--line);color:var(--text)}
 .mobile-ingredient-suggest button:last-child{border-bottom:0}
 .ingredient-edit{position:relative}
+.course-count{padding:10px 14px}
+.course-sufficient .course-qty-buy{text-decoration:line-through;opacity:.5}
+@media(max-width:600px){.mobile-ingredient-suggest{max-height:min(220px,40vh)} }
 </style>
 <script>
 (function(){
+  let activeInput=null;
   function setupIngredientSuggest(input){
     if(!input || input.dataset.suggestReady) return;
     input.dataset.suggestReady='1';
-    const box=document.createElement('div'); box.className='mobile-ingredient-suggest';
-    input.parentElement.appendChild(box);
-    function names(){
-      return (typeof getUsedIngredients==='function'?getUsedIngredients():[]);
+    const box=document.createElement('div'); box.className='mobile-ingredient-suggest'; document.body.appendChild(box);
+    function names(){ return (typeof getUsedIngredients==='function'?getUsedIngredients():[]); }
+    function place(){
+      if(!activeInput || box.style.display==='none') return;
+      const r=activeInput.getBoundingClientRect();
+      const vv=window.visualViewport;
+      const topLimit=vv?vv.offsetTop:0;
+      const bottomLimit=vv?(vv.offsetTop+vv.height):window.innerHeight;
+      const gap=6, h=Math.min(box.scrollHeight||220,220);
+      let top=r.bottom+gap;
+      if(top+h>bottomLimit-6 && r.top-h-gap>topLimit) top=r.top-h-gap;
+      top=Math.max(topLimit+4,Math.min(top,bottomLimit-h-4));
+      let left=Math.max(6,Math.min(r.left,window.innerWidth-r.width-6));
+      box.style.left=left+'px'; box.style.top=top+'px'; box.style.width=Math.min(r.width,window.innerWidth-12)+'px';
     }
+    function hide(){if(activeInput===input)activeInput=null;box.style.display='none';box.innerHTML='';}
     function render(){
+      activeInput=input;
       const q=norm(input.value||'');
-      if(!q){box.style.display='none'; box.innerHTML=''; return;}
+      if(!q){hide();return}
       const list=names().filter(n=>norm(n).startsWith(q)).slice(0,12);
-      if(!list.length){box.style.display='none'; box.innerHTML=''; return;}
+      if(!list.length){hide();return}
       box.innerHTML=list.map(n=>`<button type="button">${esc(n)}</button>`).join('');
+      box.querySelectorAll('button').forEach((b,i)=>b.addEventListener('mousedown',e=>e.preventDefault()));
+      box.querySelectorAll('button').forEach((b,i)=>b.addEventListener('touchstart',e=>e.preventDefault(),{passive:false}));
       box.querySelectorAll('button').forEach((b,i)=>b.addEventListener('click',()=>{
-        input.value=list[i]; box.style.display='none';
-        input.dispatchEvent(new Event('input',{bubbles:true}));
+        input.value=list[i]; box.style.display='none'; input.dispatchEvent(new Event('input',{bubbles:true}));
       }));
-      box.style.display='block';
+      box.style.display='block'; requestAnimationFrame(place);
     }
     input.addEventListener('input',render);
-    input.addEventListener('focus',render);
-    input.addEventListener('blur',()=>setTimeout(()=>box.style.display='none',180));
+    input.addEventListener('focus',()=>{activeInput=input;setTimeout(render,30);setTimeout(place,80)});
+    input.addEventListener('blur',()=>setTimeout(()=>{if(document.activeElement!==input && !box.contains(document.activeElement))hide()},180));
+    input.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
   }
   function scan(){document.querySelectorAll('#ingredientRows .ing-name').forEach(setupIngredientSuggest)}
   const old=window.addIngredientRow;
-  if(typeof old==='function'){
-    window.addIngredientRow=function(){old.apply(this,arguments); setTimeout(scan,0)};
-  }
+  if(typeof old==='function') window.addIngredientRow=function(){old.apply(this,arguments);setTimeout(scan,0)};
   new MutationObserver(scan).observe(document.body,{childList:true,subtree:true});
+  window.addEventListener('scroll',()=>activeInput&&place(),true);
+  window.addEventListener('resize',()=>activeInput&&place());
+  if(window.visualViewport){visualViewport.addEventListener('resize',()=>activeInput&&place());visualViewport.addEventListener('scroll',()=>activeInput&&place());}
   scan();
 })();
 </script>
