@@ -310,7 +310,7 @@ function readObject(key){
     return value && typeof value === "object" && !Array.isArray(value) ? value : {};
   }catch(e){ return {}; }
 }
-const STORAGE_COURSE_STATE="chlovan-course-state-v2";
+const STORAGE_COURSE_STATE="chlovan-course-state-v3";
 const state = {
   week: 0,
   screen: "planning",
@@ -321,32 +321,37 @@ const state = {
   weekKeys: [calendar.currentKey,calendar.nextKey]
 };
 function loadCoursePersistence(){
-  let combined=null;
+  let data=null;
   try{
     const raw=localStorage.getItem(STORAGE_COURSE_STATE);
-    if(raw){
-      const parsed=JSON.parse(raw);
-      if(parsed && typeof parsed === "object") combined=parsed;
-    }
-  }catch(e){}
+    if(raw){ const parsed=JSON.parse(raw); if(parsed && typeof parsed==='object') data=parsed; }
+  }catch(e){ console.warn('COURSE load',e); }
   const legacyChecked=readObject(STORAGE_CHECKED);
   const legacyStock=readObject(STORAGE_STOCK);
-  state.checked=(combined && combined.checked && typeof combined.checked==='object') ? combined.checked : legacyChecked;
-  state.stock=(combined && combined.stock && typeof combined.stock==='object') ? combined.stock : legacyStock;
+  const checked=data?.checked && typeof data.checked==='object' ? data.checked : legacyChecked;
+  const stock=data?.stock && typeof data.stock==='object' ? data.stock : legacyStock;
+  state.checked={...checked};
+  state.stock={...stock};
 }
 function saveCoursePersistence(){
+  const checked={...(state.checked||{})};
+  const stock={...(state.stock||{})};
+  const payload={version:3,checked,stock,savedAt:Date.now()};
   try{
-    const payload={version:2,checked:state.checked||{},stock:state.stock||{},savedAt:Date.now()};
     const json=JSON.stringify(payload);
     localStorage.setItem(STORAGE_COURSE_STATE,json);
-    /* Keep the old keys too so existing installations remain compatible. */
-    localStorage.setItem(STORAGE_CHECKED,JSON.stringify(state.checked||{}));
-    localStorage.setItem(STORAGE_STOCK,JSON.stringify(state.stock||{}));
+    localStorage.setItem(STORAGE_CHECKED,JSON.stringify(checked));
+    localStorage.setItem(STORAGE_STOCK,JSON.stringify(stock));
+    /* Read-back verification: if storage silently fails, keep the in-memory value and report it. */
+    const verify=JSON.parse(localStorage.getItem(STORAGE_COURSE_STATE)||'{}');
+    if(JSON.stringify(verify.checked)!==JSON.stringify(checked) || JSON.stringify(verify.stock)!==JSON.stringify(stock)) throw new Error('localStorage read-back mismatch');
     return true;
-  }catch(e){
-    console.error('CHLOVAN course persistence error',e);
-    return false;
-  }
+  }catch(e){ console.error('CHLOVAN COURSE persistence failed',e); return false; }
+}
+function courseCommit(){
+  const ok=saveCoursePersistence();
+  if(!ok) showToast('⚠️ Stock/course non enregistré');
+  return ok;
 }
 function save(){
   const weeks=getStoredWeeks();
@@ -415,10 +420,9 @@ function setWeek(i){
   render();
 }
 function setScreen(s){
-  /* Persist COURSE before changing the DOM, then reload the persisted snapshot. */
+  /* COURSE is committed before every navigation; do not reload it from storage during same-page navigation. */
   saveCoursePersistence();
   state.screen=s;
-  loadCoursePersistence();
   document.querySelector("header")?.setAttribute("data-screen",s);
   document.documentElement.setAttribute("data-active-screen",s);
   document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
@@ -529,13 +533,13 @@ function applyCourseStock(id,stock,inputEl){
 function setStock(id,value,inputEl){
   const n=parseQty(value);
   if(n>0)state.stock[id]=n; else delete state.stock[id];
-  saveCoursePersistence();
+  courseCommit();
   applyCourseStock(id,n,inputEl);
 }
 function setStockLive(id,input){
   const n=parseQty(input?.value);
   if(n>0)state.stock[id]=n; else delete state.stock[id];
-  saveCoursePersistence();
+  courseCommit();
   applyCourseStock(id,n,input);
 }
 function updateCourseRemainingCounter(){
@@ -545,11 +549,11 @@ function updateCourseRemainingCounter(){
   if(el)el.textContent=remaining+' ingrédient'+(remaining>1?'s':'')+' manquant'+(remaining>1?'s':'');
 }
 function toggleCheck(id,checkbox){
-  const checked=checkbox?!!checkbox.checked:!state.checked[id];
+  const checked=checkbox ? !!checkbox.checked : !state.checked[id];
   state.checked[id]=checked;
-  saveCoursePersistence();
+  courseCommit();
   const row=(checkbox?.closest('.course-row'))||getCourseRow(id);
-  if(row)row.classList.toggle('checked',checked);
+  if(row){ row.classList.toggle('checked',checked); const box=row.querySelector('input[type="checkbox"]'); if(box) box.checked=checked; }
   updateCourseRemainingCounter();
 }
 function courseRemainingCount(rows){
@@ -598,12 +602,12 @@ function saveExtraCourse(){
   if(existing)existing.quantity=(Number(existing.quantity)||0)+quantity;
   else arr.push({id:'EX-'+Date.now(),ingredient,quantity,unit,category});
   setExtraCourseItems(arr);
+  saveCoursePersistence();
   closeMealDetail();
   renderCourses();
   showToast('Ajouté à la course');
 }
 function renderCourses(){
- loadCoursePersistence();
  const root=document.getElementById("courses"),rows=calcCourses();
  const remaining=courseRemainingCount(rows);
  const countText=remaining+' ingrédient'+(remaining>1?'s':'')+' manquant'+(remaining>1?'s':'');
@@ -619,17 +623,35 @@ function renderCourses(){
      const id=courseStockId(x),checked=!!state.checked[id],stock=parseQty(state.stock[id]),need=parseQty(x.quantity),buy=Math.max(0,need-stock);
      const meals=[...x.meals];
      return `<div class="course-row ${checked?'checked':''} ${buy===0?'course-sufficient':''}" data-stock-id="${esc(id)}">
-       <input type="checkbox" ${checked?'checked':''} onchange="toggleCheck(${JSON.stringify(id)},this)">
+       <input type="checkbox" ${checked?'checked':''} >
        <div class="course-main">
          <div><span class="course-qty-buy qty">${fmtQty(buy)} ${esc(x.unit)}</span> — ${esc(x.ingredient)}</div>
          <div class="course-stock-line">
-           <div class="course-home-pill"><span class="course-home-label">À la maison</span><input class="course-stock-input" type="number" min="0" step="any" value="${stock||''}" placeholder="0" data-need="${parseQty(x.quantity)}" data-unit="${esc(x.unit)}" oninput="setStockLive(${JSON.stringify(id)},this)" onchange="setStock(${JSON.stringify(id)},this.value)" onblur="setStock(${JSON.stringify(id)},this.value)" onclick="event.stopPropagation()" onkeydown="if(event.key==='Enter'){this.blur();} event.stopPropagation()"><span class="course-home-unit">${esc(x.unit)}</span></div>
+           <div class="course-home-pill"><span class="course-home-label">À la maison</span><input class="course-stock-input" type="number" min="0" step="any" value="${stock||''}" placeholder="0" data-need="${parseQty(x.quantity)}" data-unit="${esc(x.unit)}" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"><span class="course-home-unit">${esc(x.unit)}</span></div>
            <b class="course-buy ${buy===0?'enough':''}">${buy===0?'✓ Suffisant à la maison':'À acheter : '+fmtQty(buy)+' '+esc(x.unit)}</b>
          </div>
          <div class="source">${meals.map(m=>esc(m)).join(' · ')}</div>
        </div>
      </div>`
    }).join('')}</div></div>`).join(''):'<div class="empty-state">Aucun ingrédient à acheter.<br><br>Ajoute des repas ou un article hors menu.</div>'}`;
+ bindCourseInputs();
+}
+function bindCourseInputs(){
+  document.querySelectorAll('#courses .course-stock-input').forEach(input=>{
+    if(input.dataset.bound==='1') return;
+    input.dataset.bound='1';
+    const id=input.closest('.course-row')?.getAttribute('data-stock-id'); if(!id) return;
+    input.addEventListener('input',()=>setStockLive(id,input));
+    input.addEventListener('change',()=>setStock(id,input.value,input));
+    input.addEventListener('blur',()=>setStock(id,input.value,input));
+    input.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); input.blur(); } });
+  });
+  document.querySelectorAll('#courses .course-row input[type="checkbox"]').forEach(box=>{
+    if(box.dataset.bound==='1') return;
+    box.dataset.bound='1';
+    const id=box.closest('.course-row')?.getAttribute('data-stock-id'); if(!id) return;
+    box.addEventListener('change',()=>toggleCheck(id,box));
+  });
 }
 function renderMeals(){
  const root=document.getElementById("meals");
@@ -889,27 +911,10 @@ html[data-active-screen] .weekbtn.active{background:var(--tab);border-color:var(
 })();
 </script>
 <script>
-/* V14 : pendant la phase de test, aucun service worker n'est enregistré.
-   On désactive une éventuelle ancienne version afin qu'elle ne serve pas un ancien HTML.
-   Les données localStorage (menu, stock, cases, recettes, tâches) ne sont pas supprimées. */
+/* V15 : aucun service worker CHLOVAN n'est utilisé pendant le diagnostic COURSE. */
 if("serviceWorker" in navigator){
-  window.addEventListener("load",async()=>{
-    try{
-      const marker="chlovan-sw-purged-v14";
-      const already=sessionStorage.getItem(marker)==="1";
-      const regs=await navigator.serviceWorker.getRegistrations();
-      const had=regs.length>0;
-      await Promise.all(regs.map(r=>r.unregister()));
-      if(window.caches){
-        const keys=await caches.keys();
-        await Promise.all(keys.map(k=>caches.delete(k)));
-      }
-      if(had && !already){
-        sessionStorage.setItem(marker,"1");
-        location.reload();
-      }
-    }catch(e){ console.warn("CHLOVAN SW cleanup",e); }
-  });
+  navigator.serviceWorker.getRegistrations().then(regs=>Promise.all(regs.map(r=>r.unregister()))).catch(()=>{});
+  if(window.caches) caches.keys().then(keys=>Promise.all(keys.map(k=>caches.delete(k)))).catch(()=>{});
 }
 </script>
 </body>
